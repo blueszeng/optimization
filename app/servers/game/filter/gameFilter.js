@@ -1,12 +1,12 @@
-var logger = require('pomelo-logger');
-var pomelo = require('pomelo');
-var Code = require("../../../code/ErrorCode");
+let logger = require('pomelo-logger');
+let pomelo = require('pomelo');
+let Code = require("../../../code/ErrorCode");
 
 module.exports = function() {
 	return new Filter();
 };
 
-var Filter = function() {
+let Filter = function() {
 };
 
 /**
@@ -14,7 +14,7 @@ var Filter = function() {
  */
 Filter.prototype.before = function(msg, session, next){
 
-	var uid = session.uid, rid = session.get('rid');
+	let uid = session.uid, rid = session.get('rid');
 	//console.log("filter:", uid, rid);
 	if(!uid || !rid)
 	{

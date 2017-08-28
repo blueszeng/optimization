@@ -3,8 +3,8 @@
  * Copyright(c) 2012 fantasyni <fantasyni@163.com>
  * MIT Licensed
  */
-var logger = require('pomelo-logger').getLogger(__filename);
-var utils = require('../util/utils');
+let logger = require('pomelo-logger').getLogger(__filename);
+let utils = require('../util/utils');
 
 module.exports = function(opts) {
 	return new Module(opts);
@@ -12,7 +12,7 @@ module.exports = function(opts) {
 
 module.exports.moduleId = 'roomStatus';
 
-var Module = function(opts) {
+let Module = function(opts) {
 	opts = opts || {};
 	this.type = opts.type || 'pull';
 	this.interval = opts.interval || 5;
@@ -20,9 +20,9 @@ var Module = function(opts) {
 
 Module.prototype.monitorHandler = function(agent, msg, cb) {
 	//collect data
-	var serverId = agent.id;
-	var RoomManager = require('../domain/Manager/RoomManager');
-	var data = RoomManager.GetAllRoomInfo();
+	let serverId = agent.id;
+	let RoomManager = require('../domain/Manager/RoomManager');
+	let data = RoomManager.GetAllRoomInfo();
 	//console.log(data);
 	agent.notify(module.exports.moduleId,data);
 };
@@ -30,7 +30,7 @@ Module.prototype.monitorHandler = function(agent, msg, cb) {
 Module.prototype.masterHandler = function(agent, msg, cb) {
 	if(!msg) {
 		// pull interval callback
-		var list = agent.typeMap['game'];
+		let list = agent.typeMap['game'];
 		if(!list || list.length === 0) {
 			return;
 		}
@@ -38,7 +38,7 @@ Module.prototype.masterHandler = function(agent, msg, cb) {
 		return;
 	}
 	//console.log(msg);
-	var data = agent.get(module.exports.moduleId);
+	let data = agent.get(module.exports.moduleId);
 	if(!data) {
 		data = {};
 		agent.set(module.exports.moduleId, data);

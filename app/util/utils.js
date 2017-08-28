@@ -1,8 +1,8 @@
-var utils = module.exports;
+let utils = module.exports;
 
 // control variable of func "myPrint"
-var isPrintFlag = false;
-// var isPrintFlag = true;
+let isPrintFlag = false;
+// let isPrintFlag = true;
 
 /**
  * Check and invoke callback function
@@ -21,8 +21,8 @@ utils.clone = function (origin) {
     return;
   }
 
-  var obj = {};
-  for (var f in origin) {
+  let obj = {};
+  for (let f in origin) {
     if (origin.hasOwnProperty(f)) {
       obj[f] = origin[f];
     }
@@ -35,8 +35,8 @@ utils.size = function (obj) {
     return 0;
   }
 
-  var size = 0;
-  for (var f in obj) {
+  let size = 0;
+  for (let f in obj) {
     if (obj.hasOwnProperty(f)) {
       size++;
     }
@@ -47,13 +47,13 @@ utils.size = function (obj) {
 
 // print the file name and the line number ~ begin
 function getStack() {
-  var orig = Error.prepareStackTrace;
+  let orig = Error.prepareStackTrace;
   Error.prepareStackTrace = function (_, stack) {
     return stack;
   };
-  var err = new Error();
+  let err = new Error();
   Error.captureStackTrace(err, arguments.callee);
-  var stack = err.stack;
+  let stack = err.stack;
   Error.prepareStackTrace = orig;
   return stack;
 }
@@ -68,13 +68,13 @@ function getLineNumber(stack) {
 
 utils.myPrint = function () {
   if (isPrintFlag) {
-    var len = arguments.length;
+    let len = arguments.length;
     if (len <= 0) {
       return;
     }
-    var stack = getStack();
-    var aimStr = '\'' + getFileName(stack) + '\' @' + getLineNumber(stack) + ' :\n';
-    for (var i = 0; i < len; ++i) {
+    let stack = getStack();
+    let aimStr = '\'' + getFileName(stack) + '\' @' + getLineNumber(stack) + ' :\n';
+    for (let i = 0; i < len; ++i) {
       aimStr += arguments[i] + ' ';
     }
     console.log('\n' + aimStr);
@@ -87,19 +87,19 @@ utils.myPrint = function () {
  */
 utils.rpcFuncPromisify = function (func, self) {
   return function () {
-    var args = [];
-    var len = arguments.length;
-    for (var i = 0; i < len; i++) {
+    let args = [];
+    let len = arguments.length;
+    for (let i = 0; i < len; i++) {
       args.push(arguments[i]);
     }
     return new Promise(function (resolve, reject) {
-      var onCallBack = function (err, result) {
+      let onCallBack = function (err, result) {
         if (!!err) {
           return reject(err);
         }
         if (arguments.length >= 3) {  //RPC 回调返回参数超过 3个 就返回一个数组
-          var arryRes = [];
-          for (var i = 1; i < arguments.length; i++) {
+          let arryRes = [];
+          for (let i = 1; i < arguments.length; i++) {
             arryRes.push(arguments[i]);
           }
           return resolve(arryRes);

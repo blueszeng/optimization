@@ -1,20 +1,20 @@
 
-var Code = require("../../../code/ErrorCode");
-var PlayerDao = require("../../../dao/PlayerDao");
-var tokenManager = require("../../../util/token");
-var config = require("../../../../config/serverSettings.json");
-var dispatcher = require("../../../util/dispatcher");
-var routeUtil = require("../../../util/routeUtil");
-var PlayerManager = require("../../../domain/Manager/PlayerManager");
-var utils = require('../../../util/utils');
-var logger = require('pomelo-logger').getLogger(__filename);
+let Code = require("../../../code/ErrorCode");
+let PlayerDao = require("../../../dao/PlayerDao");
+let tokenManager = require("../../../util/token");
+let config = require("../../../../config/serverSettings.json");
+let dispatcher = require("../../../util/dispatcher");
+let routeUtil = require("../../../util/routeUtil");
+let PlayerManager = require("../../../domain/Manager/PlayerManager");
+let utils = require('../../../util/utils');
+let logger = require('pomelo-logger').getLogger(__filename);
 
 module.exports = function (app) {
 	return new Handler(app);
 };
 
-var sessionService;
-var Handler = function (app) {
+let sessionService;
+let Handler = function (app) {
 	this.app = app;
 	this.gameRoomRemote;
 	this.sid = app.getServerId();
@@ -29,21 +29,21 @@ var Handler = function (app) {
 };
 
 function LoginFailedReturn(msg, session, next, step) {
-	var address = sessionService.getClientAddressBySessionId(session.id)
+	let address = sessionService.getClientAddressBySessionId(session.id)
 	logger.warn(step, msg, address);
 	next(null, { code: Code.LOGIN_FAILED });
 }
 
 Handler.prototype.Login = function (msg, session, next) {
 	// body...
-	var uid = msg.uid;
-	var token = msg.token;
+	let uid = msg.uid;
+	let token = msg.token;
 	if (!uid || !token) {
 		LoginFailedReturn(msg, session, next, "Login failed No Arguments");
 		return;
 	}
 
-	var tokenResult = tokenManager.parse(token, config.TokenPassword);
+	let tokenResult = tokenManager.parse(token, config.TokenPassword);
 	if (!tokenResult) {
 		LoginFailedReturn(msg, session, next, "Login failed wrong token");
 		return;
@@ -53,7 +53,7 @@ Handler.prototype.Login = function (msg, session, next) {
 		return;
 	}
 
-	var self = this;
+	let self = this;
 	// console.log(uid);
 	PlayerDao.FindPlayerByUserID(uid)
 		.then((playerEntity) => {
@@ -74,7 +74,7 @@ Handler.prototype.Login = function (msg, session, next) {
 				return;
 			}
 
-			var address = sessionService.getClientAddressBySessionId(session.id);
+			let address = sessionService.getClientAddressBySessionId(session.id);
 			playerEntity.SetIP(address.ip);
 
 			sessionService.kick(uid, { code: Code.USER_LOGIN_SOMEWHERE }, function (kerr, ret) {
@@ -87,7 +87,7 @@ Handler.prototype.Login = function (msg, session, next) {
 			session.on('closed', onUserLeave.bind(null, self.app));
 
 			self.app.MessageManager.PostSingleMessage(session);
-			var rid = PlayerManager.GetPlayerRoom(uid);
+			let rid = PlayerManager.GetPlayerRoom(uid);
 			if (!!rid) {
 				session.set("rid", rid);
 				session.push('rid', function (err) {
@@ -96,7 +96,7 @@ Handler.prototype.Login = function (msg, session, next) {
 					}
 				});
 
-				var tsid = routeUtil.toGame(self.app, rid);
+				let tsid = routeUtil.toGame(self.app, rid);
 				return self.gameRoomRemote.checkRID(tsid, uid, rid)
 					.then((ret) => {
 						if (ret.ret) {
@@ -138,14 +138,14 @@ Handler.prototype.Login = function (msg, session, next) {
 // });
 
 
-var onUserLeave = function (app, session, reason) {
+let onUserLeave = function (app, session, reason) {
 
 	if (!session || !session.uid) {
 		return;
 	}
-	var rid = session.get("rid");
+	let rid = session.get("rid");
 	if (!!rid) {
-		var tsid = routeUtil.toGame(app, rid);
+		let tsid = routeUtil.toGame(app, rid);
 		return self.gameRoomRemote.userLeave(tsid, session.uid, rid)
 			.catch((err) => {
 				logger.error('user leave error! %j', err);
@@ -174,13 +174,13 @@ var onUserLeave = function (app, session, reason) {
 
 Handler.prototype.getUserInfo = function (msg, session, next) {
 
-	var uid = session.uid;
+	let uid = session.uid;
 	// if(!uid)
 	// {
 	// 	next(null, {code: Code.LOGIN_FIRST});
 	// 	return;
 	// }
-	var playerEntity = PlayerManager.GetPlayer(uid);
+	let playerEntity = PlayerManager.GetPlayer(uid);
 	// if(!playerEntity)
 	// {
 	// 	next(null, {code: Code.FAIL});
@@ -192,13 +192,13 @@ Handler.prototype.getUserInfo = function (msg, session, next) {
 
 Handler.prototype.getUserUpdate = function (msg, session, next) {
 	//console.log(msg);
-	var uid = session.uid;
+	let uid = session.uid;
 	// if(!uid)
 	// {
 	// 	next(null, {code: Code.FAIL});
 	// 	return;
 	// }
-	var playerEntity = PlayerManager.GetPlayer(uid);
+	let playerEntity = PlayerManager.GetPlayer(uid);
 	// if(!playerEntity)
 	// {
 	// 	next(null, {code: Code.FAIL});
@@ -216,7 +216,7 @@ Handler.prototype.getPublicMessage = function (msg, session, next) {
  * 防止频繁访问出现bug
  * @type {Object}
  */
-var LockPlayer = {
+let LockPlayer = {
 
 };
 
@@ -228,9 +228,9 @@ var LockPlayer = {
  * @return {Void}
  */
 Handler.prototype.createRoom = function (msg, session, next) {
-	var cost = msg.cost;
-	var uid = session.uid;
-	var opt = msg.opt;
+	let cost = msg.cost;
+	let uid = session.uid;
+	let opt = msg.opt;
 	if ((cost !== 1 && cost !== 2 && cost !== 3) || typeof opt != "object" ||
 		isNaN(opt.type) || isNaN(opt.ma) || isNaN(opt.gui) || isNaN(opt.wanfa) || isNaN(opt.hufa)) {
 		logger.error("createRoom PARAMETER_ERROR", uid, opt, cost);
@@ -242,14 +242,14 @@ Handler.prototype.createRoom = function (msg, session, next) {
 		next(null, { code: Code.PLAYER_IN_ROOM });
 		return;
 	}
-	var playerEntity = PlayerManager.GetPlayer(session.uid);
+	let playerEntity = PlayerManager.GetPlayer(session.uid);
 
 	if (!playerEntity.IsEnoughCard(cost)) {
 
 		next(null, { code: Code.Card_NOT_ENOUGH });
 		return;
 	}
-	var now = Date.now();
+	let now = Date.now();
 	if (!!LockPlayer[uid]) {
 		if (now < LockPlayer[uid]) {
 			next(null, { code: Code.VISIT_TOO_MUCH });
@@ -291,16 +291,16 @@ Handler.prototype.createRoom = function (msg, session, next) {
 
 
 Handler.prototype.joinRoom = function (msg, session, next) {
-	var rid = msg.rid;
-	var uid = session.uid;
+	let rid = msg.rid;
+	let uid = session.uid;
 
-	var playerEntity = PlayerManager.GetPlayer(session.uid);
+	let playerEntity = PlayerManager.GetPlayer(session.uid);
 	if (PlayerManager.GetPlayerRoom(uid)) {
 		next(null, { code: Code.PLAYER_IN_ROOM });
 		return;
 	}
 	//console.log("join room",rid);
-	var now = Date.now();
+	let now = Date.now();
 	if (!!LockPlayer[uid]) {
 		if (now < LockPlayer[uid]) {
 			next(null, { code: Code.VISIT_TOO_MUCH });
@@ -309,7 +309,7 @@ Handler.prototype.joinRoom = function (msg, session, next) {
 	}
 	LockPlayer[uid] = now + 3000;
 
-	var sid = routeUtil.toGame(this.app, rid);
+	let sid = routeUtil.toGame(this.app, rid);
 	if (!sid) {
 		next(null, { code: Code.NO_SUCH_ROOM });
 		return;
@@ -347,7 +347,7 @@ Handler.prototype.joinRoom = function (msg, session, next) {
 
 
 Handler.prototype.getUserRecords = function (msg, session, next) {
-	var uid = session.uid;
+	let uid = session.uid;
 	this.app.RecordManager.GetUserRecordByUid(uid)
 		.then((ret) => {
 			next(null, { data: ret.records });
@@ -358,8 +358,8 @@ Handler.prototype.getUserRecords = function (msg, session, next) {
 }
 
 Handler.prototype.getRecord = function (msg, session, next) {
-	var rid = msg.rid;
-	var uid = session.uid;
+	let rid = msg.rid;
+	let uid = session.uid;
 	this.app.RecordManager.GetRecordByID(rid)
 		.then((ret) => {
 			if (ret == null) {
@@ -383,9 +383,9 @@ Handler.prototype.getRecord = function (msg, session, next) {
 }
 
 Handler.prototype.PushFeedBack = function (msg, session, next) {
-	var uid = session.uid;
-	var content = msg.content;
-	var title = msg.title;
+	let uid = session.uid;
+	let content = msg.content;
+	let title = msg.title;
 	this.app.MessageManager.PushFeedBack(uid, title, content)
 	next(null, { code: Code.OK });
 }

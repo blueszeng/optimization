@@ -1,11 +1,11 @@
 
-var Code = require("../../../code/ErrorCode");
-var UserDao = require("../../../dao/UserDao");
-var tokenManager = require("../../../util/token");
-var config = require("../../../../config/serverSettings.json");
-var dispatcher = require("../../../util/dispatcher");
-var simpleRequest = require("../../../util/simpleRequest");
-var logger = require('pomelo-logger').getLogger(__filename);
+let Code = require("../../../code/ErrorCode");
+let UserDao = require("../../../dao/UserDao");
+let tokenManager = require("../../../util/token");
+let config = require("../../../../config/serverSettings.json");
+let dispatcher = require("../../../util/dispatcher");
+let simpleRequest = require("../../../util/simpleRequest");
+let logger = require('pomelo-logger').getLogger(__filename);
 module.exports = function (app) {
 	return new Handler(app);
 };
@@ -17,7 +17,7 @@ let Handler = function (app) {
 Handler.prototype.Author = function (msg, session, next) {
 	let openid = msg.openid;
 	let access_token = msg.access_token;
-	//var plat = msg.plat;
+	//let plat = msg.plat;
 
 	if (!openid || !access_token) {
 		next(null, { code: Code.FAIL });

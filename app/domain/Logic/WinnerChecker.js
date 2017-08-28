@@ -1,17 +1,17 @@
 
-var HuFa = require("./LogicConst").HuFa;
+let HuFa = require("./LogicConst").HuFa;
 
 
-var WinExporter = function () {
-	var winCount = {
+let WinExporter = function () {
+	let winCount = {
 		mutil: 0,
 		way: 0,
 		cards: [],
 		guiIdx: []
 	};
 
-	var myRate;
-	var gui;
+	let myRate;
+	let gui;
 	return {
 		SetRate: function (rate, guinput, basehu) {
 			myRate = rate;
@@ -34,10 +34,10 @@ var WinExporter = function () {
 			winCount.mutil *= myRate[src];
 		},
 		SetCards: function (cards, guiArr) {
-			var arr = [], j = guiArr.length - 1;
-			var i = cards.length - 1;
-			var tmp = cards[i];
-			var guiIdx = [];
+			let arr = [], j = guiArr.length - 1;
+			let i = cards.length - 1;
+			let tmp = cards[i];
+			let guiIdx = [];
 			if (myRate.wuguijiabei && guiArr.length == 0)
 				this.AddHuType("wuguijiabei");
 			if (cards[i] == gui) {
@@ -54,7 +54,7 @@ var WinExporter = function () {
 			arr.sort(function (a, b) { return a - b; });
 			arr.push(tmp);
 			j = 0;
-			for (var i = 0; i < arr.length && j < guiArr.length; i++) {
+			for (let i = 0; i < arr.length && j < guiArr.length; i++) {
 				if (guiArr[j] == arr[i]) {
 					j++;
 					guiIdx.push(i);
@@ -65,8 +65,8 @@ var WinExporter = function () {
 		},
 		SetCardsWithoutSort: function (cards) {
 			winCount.cards = cards;
-			var guiIdx = [];
-			for (var i = 0; i < cards.length; i++) {
+			let guiIdx = [];
+			for (let i = 0; i < cards.length; i++) {
 				if (cards[i] == gui)
 					guiIdx.push(i);
 			}
@@ -78,12 +78,12 @@ var WinExporter = function () {
 	};
 }
 
-var globeExporter = new WinExporter();
-var WinnnerChecker = {
+let globeExporter = new WinExporter();
+let WinnnerChecker = {
 	hash: {},
 	clearHash: function () {
-		var hash = this.hash;
-		for (var i = 0; i < 34; i++) {
+		let hash = this.hash;
+		for (let i = 0; i < 34; i++) {
 			hash[i] = 0;
 		}
 	},
@@ -91,13 +91,13 @@ var WinnnerChecker = {
 		globeExporter.SetRate(rate, gui, basehu);
 		////console.log("CheckWin", cardArr);
 		this.clearHash();
-		var hash = this.hash;
-		var count = 0;
-		var guiArr = [];
-		var hasType = {};
+		let hash = this.hash;
+		let count = 0;
+		let guiArr = [];
+		let hasType = {};
 
-		for (var i = 0; i < cardArr.length; i++) {
-			var cur = cardArr[i];
+		for (let i = 0; i < cardArr.length; i++) {
+			let cur = cardArr[i];
 			hash[cur] = hash[cur] || 0;
 			hash[cur]++;
 			count++;
@@ -105,7 +105,7 @@ var WinnnerChecker = {
 				hasType[Math.floor(cur / 9)] = true;
 		}
 		//console.log(hasType);
-		var guiCount = hash[gui] || 0;
+		let guiCount = hash[gui] || 0;
 		if (!!hash[gui])
 			hash[gui] = 0;
 
@@ -126,13 +126,13 @@ var WinnnerChecker = {
 			return globeExporter.GetData();
 		}
 
-		var pass = false;
-		var hasPair = false;
-		var threeConnect = 0;
-		var used = {};
-		var totalGui = guiCount;
-		var onlyYaojiu = true;
-		for (var i = 0; i < heapArr.length; i++) {
+		let pass = false;
+		let hasPair = false;
+		let threeConnect = 0;
+		let used = {};
+		let totalGui = guiCount;
+		let onlyYaojiu = true;
+		for (let i = 0; i < heapArr.length; i++) {
 			if (heapArr[i].v < 27 && (heapArr[i].v % 9 != 0 && heapArr[i].v % 9 != 8))
 				onlyYaojiu = false;
 			// 	if(heapArr[i].t == 0)
@@ -158,7 +158,7 @@ var WinnnerChecker = {
 		function FindAns() {
 			////console.log(hash);
 			////console.log(hash);
-			for (var i in hash)
+			for (let i in hash)
 				if (!!hash[i]) {
 					////console.log(i + " : " + guiCount);
 
@@ -180,14 +180,14 @@ var WinnnerChecker = {
 					}
 					if (i < 7 || (8 < i && i < 16) || (17 < i && i < 25)) {
 						if (!!hash[i + 1] && !!hash[i + 2]) {
-							for (var j = 0; j < 3; j++)
+							for (let j = 0; j < 3; j++)
 								AddUsed(i + j, 1);
 							threeConnect++;
 							if (FindAns())
 								return true;
 
 							threeConnect--;
-							for (var j = 0; j < 3; j++)
+							for (let j = 0; j < 3; j++)
 								AddUsed(i + j, -1);
 						}
 					}
@@ -234,15 +234,15 @@ var WinnnerChecker = {
 					}
 					////console.log("ere");
 					if (i < 27) {
-						var cur = i % 9;
+						let cur = i % 9;
 
-						for (var j = 0; -3 < j; j--) {
+						for (let j = 0; -3 < j; j--) {
 							if (cur + j < 0 || cur + j + 1 > 8 || cur + j + 2 > 8)
 								continue;
 
-							var start = i + j;
-							var cnt = 0;
-							for (var k = 0; k < 3; k++) {
+							let start = i + j;
+							let cnt = 0;
+							for (let k = 0; k < 3; k++) {
 								if (hash[start + k])
 									cnt++;
 								else if (!canUseGui(start + k, 1)) {
@@ -255,8 +255,8 @@ var WinnnerChecker = {
 								continue;
 
 							if (cnt == 2 && guiCount >= 1) {
-								var tmpGui = {};
-								for (var k = 0; k < 3; k++) {
+								let tmpGui = {};
+								for (let k = 0; k < 3; k++) {
 									if (!hash[start + k]) {
 										tmpGui[k] = 1;
 										guiArr[totalGui - guiCount] = start + k;
@@ -269,7 +269,7 @@ var WinnnerChecker = {
 								if (FindAns())
 									return true;
 								threeConnect--;
-								for (var k = 2; 0 <= k; k--) {
+								for (let k = 2; 0 <= k; k--) {
 									if (tmpGui[k]) {
 										guiCount++;
 									} else {
@@ -289,7 +289,7 @@ var WinnnerChecker = {
 
 
 			if (guiCount > 0) {
-				for (var i = 0; i < 4; i++)
+				for (let i = 0; i < 4; i++)
 					if (hasType[i]) {
 						while (guiCount > 0) {
 							guiArr[totalGui - guiCount] = i * 9;
@@ -301,10 +301,10 @@ var WinnnerChecker = {
 			return true;
 		}
 
-		var ret = FindAns();
+		let ret = FindAns();
 		if (ret) {
-			var tcnt = 0, lastt = 0;
-			for (var i = 0; i < 4; i++) {
+			let tcnt = 0, lastt = 0;
+			for (let i = 0; i < 4; i++) {
 				if (hasType[i]) {
 					tcnt++;
 					lastt = i;
@@ -337,8 +337,8 @@ var WinnnerChecker = {
 			}
 
 			if (!!rate.yaojiu && threeConnect == 0 && onlyYaojiu) {
-				var pass = true;
-				for (var i = 0; i < cardArr.length && pass; i++) {
+				let pass = true;
+				for (let i = 0; i < cardArr.length && pass; i++) {
 					if (cardArr[i] != gui && (cardArr[i] < 27 && cardArr[i] % 9 != 0 && cardArr[i] % 9 != 8))
 						pass = false;
 				}
@@ -397,12 +397,12 @@ var WinnnerChecker = {
 		if (count < 13)
 			return false;
 
-		var arr = [0, 8, 9, 17, 18, 26, 27, 28, 29, 30, 31, 32, 33];
-		var pair = false;
-		var curGuiCount = guiCount;
-		var j = 0;
-		for (var i = 0; i < arr.length; i++) {
-			var cur = arr[i];
+		let arr = [0, 8, 9, 17, 18, 26, 27, 28, 29, 30, 31, 32, 33];
+		let pair = false;
+		let curGuiCount = guiCount;
+		let j = 0;
+		for (let i = 0; i < arr.length; i++) {
+			let cur = arr[i];
 			if (!hash[cur]) {
 				if (curGuiCount == 0)
 					return false;
@@ -432,10 +432,10 @@ var WinnnerChecker = {
 	CheckQiDui: function (hash, count, guiCount, guiArr, gui) {
 		if (count < 13)
 			return false;
-		var j = 0;
-		var curGuiCount = guiCount;
-		var j = 0;
-		for (var src in hash) {
+		let j = 0;
+		let curGuiCount = guiCount;
+		let j = 0;
+		for (let src in hash) {
 			if (hash[src] % 2 == 1) {
 				if (curGuiCount == 0)
 					return false;

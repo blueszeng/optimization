@@ -1,4 +1,4 @@
-var logger = require('pomelo-logger').getLogger(__filename);
+let logger = require('pomelo-logger').getLogger(__filename);
 const https = require('https');
 
 
@@ -11,13 +11,13 @@ const HttpsReuest = function (url, params) {
 				"sex": 1
 			});
 		}
-		var requestUrl = url;
-		for (var src in params) {
+		let requestUrl = url;
+		for (let src in params) {
 			requestUrl += src + "=" + params[src] + "&";
 		}
 
 		https.get(requestUrl, (res) => {
-			var data = null;
+			let data = null;
 			res.on('data', (d) => {
 				if (!!data)
 					data += d;
@@ -51,8 +51,8 @@ module.exports = {
 // 			});
 // 			return;
 // 		}
-// 		var requestUrl = url;
-// 		for (var src in params) {
+// 		let requestUrl = url;
+// 		for (let src in params) {
 // 			requestUrl += src + "=" + params[src] + "&";
 // 		}
 
@@ -60,7 +60,7 @@ module.exports = {
 // 		https.get(requestUrl, (res) => {
 // 			// console.log('statusCode:', res.statusCode);
 // 			// console.log('headers:', res.headers);
-// 			var data = null;
+// 			let data = null;
 // 			res.on('data', (d) => {
 // 				if (!!data)
 // 					data += d;

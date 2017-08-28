@@ -1,13 +1,13 @@
-var ErrorCode = require("./ErrorCode");
+let ErrorCode = require("./ErrorCode");
 
-var str = "";
+let str = "";
 
-for(var src in ErrorCode)
+for(let src in ErrorCode)
 {
 	console.log(src);//+"\t"+ErrorCode[src]);
 }
 
-for(var src in ErrorCode)
+for(let src in ErrorCode)
 {
 	console.log(ErrorCode[src]);
 }

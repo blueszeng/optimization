@@ -1,43 +1,43 @@
-var Operation = require("./Operation");
-var WinnerChecker = require("./WinnerChecker");
-var ScoreCount = require("../ScoreCount");
-var GameRecord = require("./GameRecord");
-var logger = require('pomelo-logger').getLogger(__filename);
+let Operation = require("./Operation");
+let WinnerChecker = require("./WinnerChecker");
+let ScoreCount = require("../ScoreCount");
+let GameRecord = require("./GameRecord");
+let logger = require('pomelo-logger').getLogger(__filename);
 /*
 0-34 分别表示1-9万 1-9柄 1-9锁 东南西北中发白
 
 */
 
-var LogicConst = require('./LogicConst');
-var HuFa = LogicConst.HuFa;
-var OperationResult = LogicConst.OperationResult;
-var GameType = LogicConst.GameType;
-var StartPoint = LogicConst.StartPoint;
-var CheckHuFa = LogicConst.CheckHuFa;
-var WanFa = LogicConst.WanFa;
-var maxPlayer = LogicConst.MaxPlayer;
+let LogicConst = require('./LogicConst');
+let HuFa = LogicConst.HuFa;
+let OperationResult = LogicConst.OperationResult;
+let GameType = LogicConst.GameType;
+let StartPoint = LogicConst.StartPoint;
+let CheckHuFa = LogicConst.CheckHuFa;
+let WanFa = LogicConst.WanFa;
+let maxPlayer = LogicConst.MaxPlayer;
 
-var GameLogic = function (msgSender, roomEntity) {
-	var sender = msgSender;
-	var room = roomEntity;
-	var players = [];
-	var scoreCount = new ScoreCount(players);
-	var gameRecord = null;
-	var cards = [];
-	var option;
-	var currentIdx = 0;
-	var lastPlay = -1;
+let GameLogic = function (msgSender, roomEntity) {
+	let sender = msgSender;
+	let room = roomEntity;
+	let players = [];
+	let scoreCount = new ScoreCount(players);
+	let gameRecord = null;
+	let cards = [];
+	let option;
+	let currentIdx = 0;
+	let lastPlay = -1;
 
-	var maKeeper = [];
+	let maKeeper = [];
 
-	var host;
-	var lastHost = 0;
-	var ma = 0; // 无码 二码 四码 六码
-	var gui = -1; //鬼牌 无-1  白板33  翻鬼0-33
-	var xuangui;
+	let host;
+	let lastHost = 0;
+	let ma = 0; // 无码 二码 四码 六码
+	let gui = -1; //鬼牌 无-1  白板33  翻鬼0-33
+	let xuangui;
 
 	//倍率
-	var rate = {
+	let rate = {
 		qidui: 0,		//七对
 		shisan: 0,		//十三幺
 		qingyise: 0,	//清一色
@@ -49,8 +49,8 @@ var GameLogic = function (msgSender, roomEntity) {
 	};
 
 	//玩法
-	var gameWay = {};
-	var myOperation = new Operation();
+	let gameWay = {};
+	let myOperation = new Operation();
 	// 	const WanFa =
 	// {
 	// 	meiwan: 1,
@@ -63,16 +63,16 @@ var GameLogic = function (msgSender, roomEntity) {
 	// 	genpai: 256
 	// }
 	//
-	var huInfo = {};
-	var PengLock = {};
-	var QuanBaoRecord = {};	//全包的记录关系
-	var zanpaiRecord = {};	//沾牌的记录关系
+	let huInfo = {};
+	let PengLock = {};
+	let QuanBaoRecord = {};	//全包的记录关系
+	let zanpaiRecord = {};	//沾牌的记录关系
 	//跟牌的三个数值  分别是跟庄的状态 数值  统计
-	var genZhuang = true;
-	var genValue = -1;
-	var genCount = 0;
+	let genZhuang = true;
+	let genValue = -1;
+	let genCount = 0;
 	//杠上杠
-	var lianGang = -1;
+	let lianGang = -1;
 	//如果等于鬼牌自动排到数组前面
 	function SortParam(a, b) {
 		if (a === gui)
@@ -81,14 +81,14 @@ var GameLogic = function (msgSender, roomEntity) {
 		return a - b;
 	}
 
-	var nextAction = null;
-	var startObj = null;
+	let nextAction = null;
+	let startObj = null;
 	return {
 		status: false,
 		Init: function (opt) {
 			gameWay = {};
-			var hufa = Number(opt.hufa);
-			var ways = HuFa;
+			let hufa = Number(opt.hufa);
+			let ways = HuFa;
 			if (opt.type == GameType.jihu) {
 				rate = {
 					zimo: 2,
@@ -98,7 +98,7 @@ var GameLogic = function (msgSender, roomEntity) {
 					wuguijiabei: 2,
 				};
 
-				for (var src in CheckHuFa)
+				for (let src in CheckHuFa)
 					if (!(hufa & ways[src]))
 						rate[src] = 0;
 			}
@@ -120,7 +120,7 @@ var GameLogic = function (msgSender, roomEntity) {
 					hundui: 4,
 					qiang: 2,
 				};
-				for (var src in CheckHuFa)
+				for (let src in CheckHuFa)
 					if (!(hufa & ways[src]))
 						rate[src] = 0;
 
@@ -132,7 +132,7 @@ var GameLogic = function (msgSender, roomEntity) {
 					qidui: 2
 				};
 				gameWay.ningdu = true;
-				for (var src in CheckHuFa)
+				for (let src in CheckHuFa)
 					if (!(hufa & ways[src]))
 						rate[src] = 0;
 			}
@@ -141,7 +141,7 @@ var GameLogic = function (msgSender, roomEntity) {
 					zimo: 2
 				};
 
-				for (var src in CheckHuFa)
+				for (let src in CheckHuFa)
 					if (!(hufa & ways[src]))
 						rate[src] = 0;
 			}
@@ -163,8 +163,8 @@ var GameLogic = function (msgSender, roomEntity) {
 				gui = -1;
 			}
 
-			var curWanfa = Number(opt.wanfa);
-			for (var src in WanFa) {
+			let curWanfa = Number(opt.wanfa);
+			for (let src in WanFa) {
 				if (curWanfa & WanFa[src]) {
 					gameWay[src] = true;
 					////console.log(src);
@@ -178,7 +178,7 @@ var GameLogic = function (msgSender, roomEntity) {
 			if (gameWay.qianggangquanbao)
 				gameWay.qianggang = true;
 			//console.log("gameWay",gameWay, curWanfa, WanFa);
-			for (var i = 0; i < maxPlayer; i++) {
+			for (let i = 0; i < maxPlayer; i++) {
 				players[i] = {
 					card: [],
 					his: [],
@@ -198,10 +198,10 @@ var GameLogic = function (msgSender, roomEntity) {
 			zanpaiRecord = {}
 			huInfo = {};
 			scoreCount.Init();
-			var cardCategory = 34;
-			var countCards = 0;
+			let cardCategory = 34;
+			let countCards = 0;
 			cards = [];
-			for (var i = 0; i < cardCategory; i++) {
+			for (let i = 0; i < cardCategory; i++) {
 				if (i < 9 && !!gameWay.meiwan && (!gameWay.yijiuwan || (i != 0 && i != 8))) {
 					continue;
 				}
@@ -212,9 +212,9 @@ var GameLogic = function (msgSender, roomEntity) {
 				cards.push(i);
 			}
 
-			for (var i = 0, len = cards.length; i < len; i++) {
-				var rd = Math.floor(Math.random() * len);
-				var tmp = cards[rd];
+			for (let i = 0, len = cards.length; i < len; i++) {
+				let rd = Math.floor(Math.random() * len);
+				let tmp = cards[rd];
 				cards[rd] = cards[i];
 				cards[i] = tmp;
 			}
@@ -222,13 +222,13 @@ var GameLogic = function (msgSender, roomEntity) {
 
 
 			maKeeper = [];
-			for (var i = ma * 2 - 1, j = cards.length - 1; 0 <= i; i--) {
+			for (let i = ma * 2 - 1, j = cards.length - 1; 0 <= i; i--) {
 				maKeeper[i] = cards[j];
 				j--;
 			}
 
 
-			for (var i = 0; i < maxPlayer; i++) {
+			for (let i = 0; i < maxPlayer; i++) {
 				players[i].card = cards.splice(0, 13).sort(SortParam);
 				players[i].his = [];
 				players[i].heap = [];
@@ -241,7 +241,7 @@ var GameLogic = function (msgSender, roomEntity) {
 			// startObj = {"0":[8,9,9,14,14,15,18,20,23,23,25,29,29],"1":[0,8,8,16,17,17,19,19,20,21,22,23,27],"2":[33,0,12,13,16,17,19,20,21,26,27,27,28],"3":[8,9,11,13,14,15,19,20,21,21,25,28,32],"cards":[26,33,22,15,10,22,31,24,18,28,14,25,24,16,10,12,33,0,31,12,24,26,0,25,31,30,17,32,12,28,11,18,30,30,32,10,10,30,9,22,11,13,11,27,29,26,31,15,32,33,13,29,23,18,24,16]}
 
 
-			// for(var i=0; i<4;i++)
+			// for(let i=0; i<4;i++)
 			// 	players[i].card = startObj[i];
 			// cards = startObj.cards;
 			// cards = [9,20,21,27,33,18,0,8,13,31,24,25,16,23,32,30,22,29,33,14,28,29,12,8,0,25,21,0,29,28,11,21,10,30,15,22,14,30,10,29,26,15,28,13,16,10,32,12,14,25,11,32,13,9,10,24];
@@ -268,8 +268,8 @@ var GameLogic = function (msgSender, roomEntity) {
 			myOperation.ClearOperation();
 
 			gameRecord.Init(room.GetRoomInfo(), this.GetGameInfo(-1, true));
-			for (var i = 0; i < players.length; i++) {
-				var info = this.GetGameInfo(i);
+			for (let i = 0; i < players.length; i++) {
+				let info = this.GetGameInfo(i);
 				info.level = level;
 				sender.SendGameStart(i, info);
 			}
@@ -278,9 +278,9 @@ var GameLogic = function (msgSender, roomEntity) {
 			this.GetACard(currentIdx);
 		},
 		XuanGui: function (countCards, cardCategory) {
-			var xuan = Math.floor(Math.random() * countCards);
-			var trueXuan = 0;
-			for (var i = 0; i < cardCategory; i++) {
+			let xuan = Math.floor(Math.random() * countCards);
+			let trueXuan = 0;
+			for (let i = 0; i < cardCategory; i++) {
 				if (i < 9 && !!gameWay.meiwan && (!gameWay.yijiuwan || (i != 0 && i != 8))) {
 					continue;
 				}
@@ -320,12 +320,12 @@ var GameLogic = function (msgSender, roomEntity) {
 				if (!gameWay.qghfanbei)
 					isQiangGang = false;
 			}
-			var curMa = ma;
+			let curMa = ma;
 			if (isQiangGang) {
 				curMa *= 2;
 			}
-			var hash = {};
-			for (var i = 0; i < maxPlayer; i++) {
+			let hash = {};
+			for (let i = 0; i < maxPlayer; i++) {
 				if (!!huInfo[i]) {
 					huInfo[i].zhong = [];
 				}
@@ -335,8 +335,8 @@ var GameLogic = function (msgSender, roomEntity) {
 			}
 
 			//console.log(maKeeper, maKeeper.length);
-			for (var i = 0; i < maKeeper.length; i++) {
-				var curIdx = ((maKeeper[i] % 9) % maxPlayer + host) % maxPlayer;
+			for (let i = 0; i < maKeeper.length; i++) {
+				let curIdx = ((maKeeper[i] % 9) % maxPlayer + host) % maxPlayer;
 				if (!!huInfo[curIdx]) {
 					huInfo[curIdx].zhong.push(i);
 				}
@@ -349,15 +349,15 @@ var GameLogic = function (msgSender, roomEntity) {
 				return;
 			}
 			currentIdx = idx;
-			var val = cards.shift();
+			let val = cards.shift();
 			//console.log("before get card", players[idx].card);
 			players[idx].card.push(val);
 			// console.log("after get card", players[idx].card);
 			myOperation.ClearOperation();
-			var ret = this.CheckGangorAnGang(val);
+			let ret = this.CheckGangorAnGang(val);
 
 			lastPlay = val;
-			var winResult = this.CheckWin(idx);
+			let winResult = this.CheckWin(idx);
 			if (!!gameWay.gangbaoquanbao && winResult) {
 				if (isGang !== undefined) {
 					//console.log("i am here!", isGang);
@@ -380,7 +380,7 @@ var GameLogic = function (msgSender, roomEntity) {
 			else {	//console.log("has operation get card", myOperation.GetOperation(idx));
 				myOperation.AddOperation(idx, OperationResult.None);
 				sender.SendOperation(idx, myOperation.GetOperation(idx), val);
-				var self = this;
+				let self = this;
 				nextAction = () => {
 					self.ContinuePlay();
 				};
@@ -404,7 +404,7 @@ var GameLogic = function (msgSender, roomEntity) {
 				case OperationResult.None:
 					//console.log("play none!");
 					gameRecord.AddResult(OperationResult.None, idx, -1);
-					var curOp = myOperation.GetOperation(idx);
+					let curOp = myOperation.GetOperation(idx);
 					if (curOp & OperationResult.Hu) {
 						myOperation.ClearSingleOperation(idx);
 						huInfo[idx] = null;
@@ -448,14 +448,14 @@ var GameLogic = function (msgSender, roomEntity) {
 		},
 		GetGameInfo: function (idx, needAll = false) {
 			//console.log(idx);
-			var ret = {
+			let ret = {
 				host: host,
 				gui: gui,
 				jian: zanpaiRecord,
 				remain: cards.length,
 				players: []
 			};
-			for (var i = 0; i < players.length; i++) {
+			for (let i = 0; i < players.length; i++) {
 				if (idx == i || needAll)
 					ret.players.push(JSON.parse(JSON.stringify(players[i])));
 				else {
@@ -469,7 +469,7 @@ var GameLogic = function (msgSender, roomEntity) {
 					);
 				}
 			}
-			var op = myOperation.GetOperation(idx);
+			let op = myOperation.GetOperation(idx);
 			if (!!op) {
 				ret.op = { op: op, val: lastPlay };
 			}
@@ -480,7 +480,7 @@ var GameLogic = function (msgSender, roomEntity) {
 			return gameRecord.GetOperationTo(idx, sid);
 		},
 		PlayCard: function (idx, cardValue) {
-			var cardIdx = players[idx].card.indexOf(cardValue);
+			let cardIdx = players[idx].card.indexOf(cardValue);
 			//console.log("play start", cardIdx, players[idx].card);
 			if (cardIdx < 0)
 				return false;
@@ -513,9 +513,9 @@ var GameLogic = function (msgSender, roomEntity) {
 			myOperation.ClearOperation();
 
 			if (!!gameWay.yibaizhang) {
-				var checkRet = this.CheckAllChiHu(idx, cardValue);
+				let checkRet = this.CheckAllChiHu(idx, cardValue);
 				//console.log("CheckAllChiHu", checkRet);
-				var self = this;
+				let self = this;
 				if (checkRet) {
 					//console.log("play compelete has operation", lastPlay);
 					myOperation.ForEachOperation(function (i, op) {
@@ -540,7 +540,7 @@ var GameLogic = function (msgSender, roomEntity) {
 			//console.log("check end curIdx", currentIdx);
 			if (myOperation.CheckAllOperation()) {
 				//console.log("has operation");
-				var self = this;
+				let self = this;
 				nextAction = () => {
 					myOperation.ClearOperation();
 					self.NextPlayer();
@@ -565,14 +565,14 @@ var GameLogic = function (msgSender, roomEntity) {
 			if (genZhuang) {
 				genZhuang = false;
 			}
-			var curPlayer = players[idx];
-			var cardArr = players[idx].card;
-			for (var i = 0; i < cardArr.length; i++) {
+			let curPlayer = players[idx];
+			let cardArr = players[idx].card;
+			for (let i = 0; i < cardArr.length; i++) {
 				if (cardArr[i] == lastPlay) {
 					cardArr.splice(i, 2);
 				}
 			}
-			var history = players[currentIdx].his;
+			let history = players[currentIdx].his;
 			history.splice(history.length - 1, 1);
 
 			if (!!gameWay.zanpaiquanbao && cardArr.length == 2) {
@@ -595,13 +595,13 @@ var GameLogic = function (msgSender, roomEntity) {
 			if (genZhuang) {
 				genZhuang = false;
 			}
-			var curPlayer = players[idx];
-			var cardArr = players[idx].card;
+			let curPlayer = players[idx];
+			let cardArr = players[idx].card;
 
-			var history = players[currentIdx].his;
+			let history = players[currentIdx].his;
 			history.splice(history.length - 1, 1);
 
-			for (var i = 0; i < cardArr.length; i++) {
+			for (let i = 0; i < cardArr.length; i++) {
 				if (cardArr[i] == lastPlay) {
 					cardArr.splice(i, 3);
 				}
@@ -611,7 +611,7 @@ var GameLogic = function (msgSender, roomEntity) {
 				zanpaiRecord[idx] = currentIdx;
 				sender.SendOperationResult(idx, OperationResult.Jian, currentIdx);
 			}
-			var lastIdx = currentIdx;
+			let lastIdx = currentIdx;
 			currentIdx = idx;
 
 			//console.log("diangang after", cardArr);
@@ -622,7 +622,7 @@ var GameLogic = function (msgSender, roomEntity) {
 				this.CheckQiangGang(idx, val);
 			}
 			if (myOperation.CheckAllOperation()) {
-				var self = this;
+				let self = this;
 				nextAction = () => {
 					scoreCount.FromOne(idx, lastIdx, 3);
 					scoreCount.CountGang(idx, false);
@@ -647,10 +647,10 @@ var GameLogic = function (msgSender, roomEntity) {
 		},
 		MingGang: function (idx, val) {
 
-			var curPlayer = players[idx];
-			var cardArr = players[idx].card;
-			var heap = players[idx].heap;
-			var j = 0;
+			let curPlayer = players[idx];
+			let cardArr = players[idx].card;
+			let heap = players[idx].heap;
+			let j = 0;
 			for (; j < heap.length; j++) {
 				if (heap[j].v == val)
 					break;
@@ -658,7 +658,7 @@ var GameLogic = function (msgSender, roomEntity) {
 			if (j == heap.length) {
 				return false
 			}
-			for (var i = cardArr.length - 1; 0 <= i; i--) {
+			for (let i = cardArr.length - 1; 0 <= i; i--) {
 				if (cardArr[i] == val) {
 					cardArr.splice(i, 1);
 					break;
@@ -674,7 +674,7 @@ var GameLogic = function (msgSender, roomEntity) {
 			myOperation.ClearOperation();
 			this.CheckQiangGang(idx, val);
 			if (myOperation.CheckAllOperation()) {
-				var self = this;
+				let self = this;
 				nextAction = () => {
 					if (zanpaiRecord[i] != undefined) {
 						scoreCount.FromOne(idx, zanpaiRecord[i], 3);
@@ -710,10 +710,10 @@ var GameLogic = function (msgSender, roomEntity) {
 			return true;
 		},
 		AnGang: function (idx, val) {
-			var curPlayer = players[idx];
-			var cardArr = players[idx].card;
-			var count = 0;
-			for (var i = cardArr.length - 1; 0 <= i; i--) {
+			let curPlayer = players[idx];
+			let cardArr = players[idx].card;
+			let count = 0;
+			for (let i = cardArr.length - 1; 0 <= i; i--) {
 				if (cardArr[i] == val) {
 					count++;
 				}
@@ -724,7 +724,7 @@ var GameLogic = function (msgSender, roomEntity) {
 			if (genZhuang) {
 				genZhuang = false;
 			}
-			for (var i = cardArr.length - 1; 0 <= i; i--) {
+			for (let i = cardArr.length - 1; 0 <= i; i--) {
 				if (cardArr[i] == val) {
 					cardArr.splice(i, 1);
 				}
@@ -741,9 +741,9 @@ var GameLogic = function (msgSender, roomEntity) {
 			sender.SendOperationResult(idx, OperationResult.AnGang, val);
 			myOperation.ClearOperation();
 			if (!!gameWay.yibaizhang) {
-				var hasHu = this.CheckAnGangQiangGang(idx, val);
+				let hasHu = this.CheckAnGangQiangGang(idx, val);
 				if (hasHu) {
-					var self = this;
+					let self = this;
 					nextAction = () => {
 						if (lianGang > -1) {
 							scoreCount.FromOne(idx, lianGang, 6);
@@ -774,7 +774,7 @@ var GameLogic = function (msgSender, roomEntity) {
 			if (genZhuang) {
 				genZhuang = false;
 			}
-			var ret = myOperation.ClearSingleOperation(idx);
+			let ret = myOperation.ClearSingleOperation(idx);
 			if (myOperation.CheckAllOperation()) {
 				return true;
 			}
@@ -782,12 +782,12 @@ var GameLogic = function (msgSender, roomEntity) {
 
 		},
 		EndGame: function () {
-			var allPlayersCards = [];
+			let allPlayersCards = [];
 
-			for (var i = maxPlayer - 1; 0 <= i; i--) {
+			for (let i = maxPlayer - 1; 0 <= i; i--) {
 				allPlayersCards[i] = players[i].card;
 			}
-			var result = {
+			let result = {
 				score: scoreCount.GetRoundCounter(),
 				hu: null,
 				cards: allPlayersCards
@@ -802,12 +802,12 @@ var GameLogic = function (msgSender, roomEntity) {
 			room.GameEnd();
 		},
 		CloseGame: function () {
-			var allPlayersCards = [];
+			let allPlayersCards = [];
 
-			for (var i = maxPlayer - 1; 0 <= i; i--) {
+			for (let i = maxPlayer - 1; 0 <= i; i--) {
 				allPlayersCards[i] = players[i].card;
 			}
-			var result = {
+			let result = {
 				score: scoreCount.GetRoundCounter(),
 				hu: null,
 				final: this.GetFinal(),
@@ -820,9 +820,9 @@ var GameLogic = function (msgSender, roomEntity) {
 			if (myOperation.CheckAllOperation()) {
 				return false;
 			}
-			var ret = false;
-			var isQiangGang = false;
-			for (var i = 0; i < maxPlayer; i++)
+			let ret = false;
+			let isQiangGang = false;
+			for (let i = 0; i < maxPlayer; i++)
 				if (!!huInfo[i]) {
 					if ((huInfo[i].way & HuFa.qiang) != 0)
 						isQiangGang = true;
@@ -832,9 +832,9 @@ var GameLogic = function (msgSender, roomEntity) {
 				return false;
 			this.OpenMa(isQiangGang);
 
-			for (var i = 0; i < maxPlayer; i++)
+			for (let i = 0; i < maxPlayer; i++)
 				if (!!huInfo[i]) {
-					var curHu = huInfo[i];
+					let curHu = huInfo[i];
 					if (!!rate.haidi && cards.length == 0) {
 						curHu.way |= HuFa.haidi;
 						curHu.mutil *= rate.haidi;
@@ -862,18 +862,18 @@ var GameLogic = function (msgSender, roomEntity) {
 
 					scoreCount.CountHu(i, curHu.guiIdx.length == 0, curHu.zhong.length);
 				}
-			for (var i = 0; i < maxPlayer; i++) {
+			for (let i = 0; i < maxPlayer; i++) {
 				if (!!huInfo[(host + i) % maxPlayer]) {
 					lastHost = (host + i) % maxPlayer;
 					continue;
 				}
 			}
-			var allPlayersCards = [];
+			let allPlayersCards = [];
 
-			for (var i = maxPlayer - 1; 0 <= i; i--) {
+			for (let i = maxPlayer - 1; 0 <= i; i--) {
 				allPlayersCards[i] = players[i].card;
 			}
-			var result = {
+			let result = {
 				ma: maKeeper,
 				score: scoreCount.GetRoundCounter(),
 				hu: huInfo,
@@ -896,14 +896,14 @@ var GameLogic = function (msgSender, roomEntity) {
 			//没牌不许砰 杠
 			if (cards.length == 0)
 				return;
-			var last = lastPlay;
+			let last = lastPlay;
 			////console.log("CheckPengOrDianGang");
-			for (var i = 0; i < maxPlayer; i++) {
+			for (let i = 0; i < maxPlayer; i++) {
 				if (currentIdx == i)
 					continue;
-				var count = 0;
-				var cardArr = players[i].card;
-				for (var j = 0; j < cardArr.length; j++) {
+				let count = 0;
+				let cardArr = players[i].card;
+				for (let j = 0; j < cardArr.length; j++) {
 					if (cardArr[j] == last)
 						count++;
 				}
@@ -914,7 +914,7 @@ var GameLogic = function (msgSender, roomEntity) {
 						return;
 					//锁住连碰的情况
 					if (PengLock[i]) {
-						var curIdx = PengLock[i].indexOf(last);
+						let curIdx = PengLock[i].indexOf(last);
 						if (curIdx >= 0) {
 							return;
 						}
@@ -934,18 +934,18 @@ var GameLogic = function (msgSender, roomEntity) {
 			//console.log(gameWay.qianggang);
 			if (!gameWay.qianggang)
 				return;
-			for (var i = 0; i < maxPlayer; i++) {
+			for (let i = 0; i < maxPlayer; i++) {
 				if (idx == i)
 					continue;
 
-				var tmpCards = [];
-				var cur = players[i];
-				var curCards = cur.card;
-				for (var j = 0; j < curCards.length; j++) {
+				let tmpCards = [];
+				let cur = players[i];
+				let curCards = cur.card;
+				for (let j = 0; j < curCards.length; j++) {
 					tmpCards[j] = curCards[j];
 				}
 				tmpCards.push(val);
-				var ret = WinnerChecker.CheckWin(cur.heap, tmpCards, rate, gui, "qiang");
+				let ret = WinnerChecker.CheckWin(cur.heap, tmpCards, rate, gui, "qiang");
 				//console.log("CheckQiangGang", rate, cur.heap, tmpCards,  gui, ret);
 				huInfo[i] = ret;
 				if (!!ret) {
@@ -961,11 +961,11 @@ var GameLogic = function (msgSender, roomEntity) {
 			//没牌不许砰 杠
 			if (cards.length == 0)
 				return;
-			var curPlayer = players[currentIdx];
-			var heapArr = curPlayer.heap;
-			var cardArr = curPlayer.card;
+			let curPlayer = players[currentIdx];
+			let heapArr = curPlayer.heap;
+			let cardArr = curPlayer.card;
 			//console.log("CheckGangorAnGang", heapArr, val);
-			for (var i = 0; i < heapArr.length; i++) {
+			for (let i = 0; i < heapArr.length; i++) {
 				//console.log("CheckGangorAnGang", heapArr[i].v, val, heapArr[i].v == val);
 				if (heapArr[i].v == val) {
 					//console.log("CheckGangorAnGang pass", heapArr[i], val);
@@ -975,14 +975,14 @@ var GameLogic = function (msgSender, roomEntity) {
 			}
 
 
-			var hash = {};
-			for (var i = 0; i < cardArr.length; i++) {
+			let hash = {};
+			for (let i = 0; i < cardArr.length; i++) {
 				if (!hash[cardArr[i]])
 					hash[cardArr[i]] = 0;
 				hash[cardArr[i]]++;
 			}
 			////console.log("an gang",hash);
-			for (var src in hash)
+			for (let src in hash)
 				if (hash[src] == 4) {
 					////console.log("an gang");
 					myOperation.AddOperation(currentIdx, OperationResult.AnGang);
@@ -991,9 +991,9 @@ var GameLogic = function (msgSender, roomEntity) {
 			return -1;
 		},
 		CheckWin: function (idx) {
-			var cur = players[idx];
+			let cur = players[idx];
 
-			var ret = WinnerChecker.CheckWin(cur.heap, cur.card, rate, gui);
+			let ret = WinnerChecker.CheckWin(cur.heap, cur.card, rate, gui);
 
 			huInfo[idx] = ret;
 
@@ -1003,21 +1003,21 @@ var GameLogic = function (msgSender, roomEntity) {
 			return ret;
 		},
 		CheckAllChiHu: function (idx, val) {
-			var ret = false;
-			for (var i = 0; i < maxPlayer; i++) {
+			let ret = false;
+			for (let i = 0; i < maxPlayer; i++) {
 				if (idx == i)
 					continue;
 
-				var tmpCards = [];
-				var cur = players[i];
-				var curCards = cur.card;
-				for (var j = 0; j < curCards.length; j++) {
+				let tmpCards = [];
+				let cur = players[i];
+				let curCards = cur.card;
+				for (let j = 0; j < curCards.length; j++) {
 					tmpCards[j] = curCards[j];
 				}
 				tmpCards.push(val);
-				var winResult = WinnerChecker.CheckWin(cur.heap, tmpCards, rate, gui, "chihu");
+				let winResult = WinnerChecker.CheckWin(cur.heap, tmpCards, rate, gui, "chihu");
 				if (!!winResult) {
-					var passHufa = HuFa.shisan | HuFa.quanyao | HuFa.quanfeng;
+					let passHufa = HuFa.shisan | HuFa.quanyao | HuFa.quanfeng;
 					if (!(winResult.way & passHufa))
 						continue;
 
@@ -1031,21 +1031,21 @@ var GameLogic = function (msgSender, roomEntity) {
 
 		},
 		CheckAnGangQiangGang: function (idx, val) {
-			var ret = false;
-			for (var i = 0; i < maxPlayer; i++) {
+			let ret = false;
+			for (let i = 0; i < maxPlayer; i++) {
 				if (idx == i)
 					continue;
 
-				var tmpCards = [];
-				var cur = players[i];
-				var curCards = cur.card;
-				for (var j = 0; j < curCards.length; j++) {
+				let tmpCards = [];
+				let cur = players[i];
+				let curCards = cur.card;
+				for (let j = 0; j < curCards.length; j++) {
 					tmpCards[j] = curCards[j];
 				}
 				tmpCards.push(val);
-				var winResult = WinnerChecker.CheckWin(cur.heap, tmpCards, rate, gui, "qiang");
+				let winResult = WinnerChecker.CheckWin(cur.heap, tmpCards, rate, gui, "qiang");
 				if (!!winResult) {
-					var passHufa = HuFa.shisan | HuFa.quanyao | HuFa.quanfeng;
+					let passHufa = HuFa.shisan | HuFa.quanyao | HuFa.quanfeng;
 					if (!(winResult.way & passHufa))
 						continue;
 
@@ -1063,7 +1063,7 @@ var GameLogic = function (msgSender, roomEntity) {
 
 		},
 		GetFinal: function () {
-			var final = scoreCount.GetFinalCount();
+			let final = scoreCount.GetFinalCount();
 			//console.log("GetFinal",final);
 			return final;
 		},

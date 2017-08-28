@@ -13,9 +13,9 @@ const ApplyStatus = {
 class RoomClose {
 
 	constructor(idx, agreeCB, disagreeCB) {
-		var status = {};
+		let status = {};
 
-		for (var i = 0; i < Max_Player; i++)
+		for (let i = 0; i < Max_Player; i++)
 			status[i] = ApplyStatus.Unknow;
 
 		this.status = status;
@@ -25,10 +25,10 @@ class RoomClose {
 		this.agreeCB = agreeCB;
 		this.disagreeCB = disagreeCB;
 		this.SetStatus(idx, ApplyStatus.Creator);
-		var self = this;
+		let self = this;
 		this.timer = setTimeout(function () {
 			// body...
-			for (var j = 0; j < Max_Player; j++) {
+			for (let j = 0; j < Max_Player; j++) {
 				self.SetStatus(j, ApplyStatus.Agree);
 			}
 		}, 300000);

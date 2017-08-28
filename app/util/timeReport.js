@@ -2,10 +2,10 @@ module.exports = function (opts) {
     return new Module(opts);
 }
 
-var moduleId = "timeReport";
+let moduleId = "timeReport";
 module.exports.moduleId = moduleId;
 
-var Module = function (opts) {
+let Module = function (opts) {
     this.app = opts.app;
     this.type = opts.type || 'pull';
     this.interval = opts.interval || 5;
@@ -13,21 +13,21 @@ var Module = function (opts) {
 
 Module.prototype.monitorHandler = function (agent, msg, cb) {
     console.log(this.app.getServerId() + '  ' + msg);
-    var serverId = agent.id;
-    var time = new Date().toString();
+    let serverId = agent.id;
+    let time = new Date().toString();
 
     agent.notify(moduleId, { serverId: serverId, time: time });
 };
 
 Module.prototype.masterHandler = function (agent, msg) {
     if (!msg) {
-        var testMsg = 'testMsg';
+        let testMsg = 'testMsg';
         agent.notifyAll(moduleId, testMsg);
         return;
     }
 
     console.log(msg);
-    var timeData = agent.get(moduleId);
+    let timeData = agent.get(moduleId);
     if (!timeData) {
         timeData = {};
         agent.set(moduleId, timeData);

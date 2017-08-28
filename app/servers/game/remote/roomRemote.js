@@ -1,13 +1,13 @@
 
-var RoomManager = require("../../../domain/Manager/RoomManager");
-var Code = require("../../../code/ErrorCode");
-var logger = require('pomelo-logger').getLogger(__filename);
+let RoomManager = require("../../../domain/Manager/RoomManager");
+let Code = require("../../../code/ErrorCode");
+let logger = require('pomelo-logger').getLogger(__filename);
 
 module.exports = function (app) {
 	return new roomRemote(app);
 };
 
-var roomRemote = function (app) {
+let roomRemote = function (app) {
 	this.app = app;
 	this.channelService = app.get('channelService');
 };
@@ -19,7 +19,7 @@ roomRemote.prototype.create = function (uid, sid, playerData, opt, cb) {
 		return;
 	}
 	//console.log(uid, sid, opt);
-	var room = RoomManager.CreateRoom();
+	let room = RoomManager.CreateRoom();
 
 	if (!room) {
 		logger.error("no more room");
@@ -28,7 +28,7 @@ roomRemote.prototype.create = function (uid, sid, playerData, opt, cb) {
 	}
 	//console.log(playerData);
 	//
-	var ret = room.InitOption(opt);
+	let ret = room.InitOption(opt);
 	if (!ret) {
 		cb(null, { code: Code.ROOM_CREATE_FAIL });
 		return;
@@ -41,14 +41,14 @@ roomRemote.prototype.create = function (uid, sid, playerData, opt, cb) {
 
 roomRemote.prototype.join = function (uid, sid, rid, playerData, cb) {
 	//console.log("join room",this.app.getServerId());
-	var room = RoomManager.GetRoom(rid);
+	let room = RoomManager.GetRoom(rid);
 	if (!room) {
 		cb(null, { code: Code.NO_SUCH_ROOM });
 		return;
 	}
 
 	if (room.IsFull()) {
-		var idx = room.GetIdxByUid(uid)
+		let idx = room.GetIdxByUid(uid)
 		if (idx >= 0) {
 			cb(null, { ret: Code.OK, id: rid });
 			return;
@@ -65,10 +65,10 @@ roomRemote.prototype.join = function (uid, sid, rid, playerData, cb) {
 
 roomRemote.prototype.checkRID = function (uid, rid, cb) {
 	//console.log(this.app.getServerId());
-	var room = RoomManager.GetRoom(rid);
+	let room = RoomManager.GetRoom(rid);
 	//console.log("checkRID", uid, rid, room);
 	if (!!room) {
-		var idx = room.GetIdxByUid(uid);
+		let idx = room.GetIdxByUid(uid);
 		if (idx >= 0) {
 			room.UpdateNetStatus(idx, 1);
 			cb(null, { ret: true });
@@ -81,10 +81,10 @@ roomRemote.prototype.checkRID = function (uid, rid, cb) {
 
 
 roomRemote.prototype.userLeave = function (uid, rid, cb) {
-	var room = RoomManager.GetRoom(rid);
+	let room = RoomManager.GetRoom(rid);
 	//console.log("checkRID", uid, rid, room);
 	if (!!room) {
-		var idx = room.GetIdxByUid(uid);
+		let idx = room.GetIdxByUid(uid);
 		if (idx >= 0) {
 			room.UpdateNetStatus(idx, 0);
 			cb(null, { ret: true });

@@ -1,11 +1,11 @@
-var Code = require("../../../code/ErrorCode");
-var PlayerManager = require("../../../domain/Manager/PlayerManager");
-var logger = null;
+let Code = require("../../../code/ErrorCode");
+let PlayerManager = require("../../../domain/Manager/PlayerManager");
+let logger = null;
 module.exports = function (app) {
 	return new userRemote(app);
 };
 
-var userRemote = function (app) {
+let userRemote = function (app) {
 	this.app = app;
 	this.sessionService = app.sessionService;
 	logger = require('pomelo-logger').getLogger(__filename);
@@ -13,8 +13,8 @@ var userRemote = function (app) {
 
 userRemote.prototype.leaveRoom = function (uid, reason, cb) {
 
-	var player = PlayerManager.SetPlayerRoom(uid, null);
-	var session = PlayerManager.GetPlayerSession(uid);
+	let player = PlayerManager.SetPlayerRoom(uid, null);
+	let session = PlayerManager.GetPlayerSession(uid);
 	//console.log("user leaveRoom", session);
 	if (!!session) {
 		//console.log("user leaveRoom", uid);
@@ -25,7 +25,7 @@ userRemote.prototype.leaveRoom = function (uid, reason, cb) {
 		//this.useCard(uid, 0, ()=>{});
 		//console.log("user leaveRoom  ss");
 	}
-	//var session = this.sessionService.getByUid(uid);
+	//let session = this.sessionService.getByUid(uid);
 	//console.log("remote arive", player, session);
 	cb(null, { code: Code.OK });
 }
@@ -34,9 +34,9 @@ userRemote.prototype.leaveRoom = function (uid, reason, cb) {
 userRemote.prototype.useCard = function (uid, cost, cb) {
 	//console.log(this.sessionsessionsession);
 	//console.log("useCard", uid, cost);
-	var player = PlayerManager.GetPlayer(uid);
+	let player = PlayerManager.GetPlayer(uid);
 	player.CostCard(cost);
-	var session = PlayerManager.GetPlayerSession(uid);
+	let session = PlayerManager.GetPlayerSession(uid);
 	if (!!session) {
 		//console.log("OnCardUpdate", player.playerModel.cardNum);
 		this.app.components.__connector__.send(null, "OnCardUpdate", { cardNum: player.playerModel.cardNum }, [session.id], null, function (err) {
@@ -45,20 +45,20 @@ userRemote.prototype.useCard = function (uid, cost, cb) {
 			}
 		});
 	}
-	//var session = this.sessionService.getByUid(uid);
+	//let session = this.sessionService.getByUid(uid);
 	//console.log("remote arive", player, session);
 	cb(null, { code: Code.OK });
 }
 
 userRemote.prototype.addCard = function (uid, cost, cb) {
 	//console.log("useCard", uid, cost);
-	var self = this;
+	let self = this;
 	PlayerManager.MustGetPlayer(uid)
 		.then((player) => {
 			return AddCard(cost);
 		}).then((ret) => {
 			cb(ret);
-			var session = PlayerManager.GetPlayerSession(uid);
+			let session = PlayerManager.GetPlayerSession(uid);
 			if (!!session) {
 				//console.log("OnCardUpdate", player.playerModel.cardNum);
 				self.app.components.__connector__.send(null, "OnCardUpdate", { cardNum: player.playerModel.cardNum }, [session.id], null, function (err) {

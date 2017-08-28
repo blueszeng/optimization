@@ -1,5 +1,5 @@
 
-var utils = require("./utils");
+let utils = require("./utils");
 /*
 基于时间缓存小组件
 */
@@ -12,7 +12,7 @@ class CachedManager {
 	}
 
 	ResetItemTime(id) {
-		var item = this.map[id];
+		let item = this.map[id];
 		if (!!item) {
 			item.__time = Date.now();
 			return true;
@@ -21,7 +21,7 @@ class CachedManager {
 	}
 
 	GetItem(id) {
-		var item = this.map[id];
+		let item = this.map[id];
 		if (!!item) {
 			this.ResetItemTime(id);
 			return item;
@@ -35,7 +35,7 @@ class CachedManager {
 	}
 
 	start(cb) {
-		var self = this;
+		let self = this;
 		this.timerID = setInterval(function () {
 			self.Update();
 		}, this.interval);
@@ -52,10 +52,10 @@ class CachedManager {
 	}
 
 	update() {
-		var map = this.map;
-		var curTime = Date.now();
+		let map = this.map;
+		let curTime = Date.now();
 		curTime -= this.lastTime;
-		for (var src in map) {
+		for (let src in map) {
 			if (curTime > map[src].__time) {
 				delete map[src];
 			}

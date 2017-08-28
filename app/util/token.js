@@ -1,4 +1,4 @@
-var crypto = require('crypto');
+let crypto = require('crypto');
 
 /**
  * Create token by uid. Encrypt uid and timestamp to get a token.
@@ -9,9 +9,9 @@ var crypto = require('crypto');
  * @return {String}     token string
  */
 module.exports.create = function (sid, uid, timestamp, pwd) {
-	var msg = sid + '&' + uid + '|' + timestamp;
-	var cipher = crypto.createCipher('aes256', pwd);
-	var enc = cipher.update(msg, 'utf8', 'hex');
+	let msg = sid + '&' + uid + '|' + timestamp;
+	let cipher = crypto.createCipher('aes256', pwd);
+	let enc = cipher.update(msg, 'utf8', 'hex');
 	enc += cipher.final('hex');
 	return enc;
 };
@@ -24,8 +24,8 @@ module.exports.create = function (sid, uid, timestamp, pwd) {
  * @return {Object}  uid and timestamp that exported from token. null for illegal token.     
  */
 module.exports.parse = function (token, pwd) {
-	var decipher = crypto.createDecipher('aes256', pwd);
-	var dec;
+	let decipher = crypto.createDecipher('aes256', pwd);
+	let dec;
 	try {
 		dec = decipher.update(token, 'hex', 'utf8');
 		dec += decipher.final('utf8');
@@ -33,12 +33,12 @@ module.exports.parse = function (token, pwd) {
 		console.error('[token] fail to decrypt token. %j', token);
 		return null;
 	}
-	var ts = dec.split('|');
+	let ts = dec.split('|');
 	if (ts.length !== 2) {
 		// illegal token
 		return null;
 	}
-	var dt = ts[0].split("&");
+	let dt = ts[0].split("&");
 	if (dt.length !== 2) {
 		return null;
 	}

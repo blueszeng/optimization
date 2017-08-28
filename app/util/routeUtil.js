@@ -1,18 +1,18 @@
 
-var dispatcher = require("./dispatcher");
+let dispatcher = require("./dispatcher");
 
-var base = -1;
-var length = 0;
-var gameServers = null;
+let base = -1;
+let length = 0;
+let gameServers = null;
 
-var toGame = function (app, rid) {
+let toGame = function (app, rid) {
 	if (base < 0) {
 		gameServers = app.getServersByType('game');
 		length = gameServers.length;
 		base = Math.floor(899999 / gameServers.length);
 	}
 
-	var idx = Math.floor((rid - 100000) / base);
+	let idx = Math.floor((rid - 100000) / base);
 	if (idx < 0 || idx >= length) {
 		return null;
 	}
@@ -20,7 +20,7 @@ var toGame = function (app, rid) {
 };
 
 exports.game = function (session, msg, app, cb) {
-	var rid = session.get("rid");
+	let rid = session.get("rid");
 
 	if (!!rid) {
 		rid = Number(rid);
@@ -32,7 +32,7 @@ exports.game = function (session, msg, app, cb) {
 		length = gameServers.length;
 		base = Math.floor(899999 / gameServers.length);
 	}
-	var game = dispatcher.dispatch(session.uid, gameServers);
+	let game = dispatcher.dispatch(session.uid, gameServers);
 	//console.log("gametoGame", game, msg, session.uid, gameServers);
 	cb(null, game.id);
 };

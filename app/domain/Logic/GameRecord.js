@@ -1,20 +1,20 @@
 
 
-var RecordModel = require("../../dao/schema/RecordModel");
-var logger = require('pomelo-logger').getLogger(__filename);
-var OperationResult = require("./LogicConst").OperationResult;
+let RecordModel = require("../../dao/schema/RecordModel");
+let logger = require('pomelo-logger').getLogger(__filename);
+let OperationResult = require("./LogicConst").OperationResult;
 function Recorder() {
 
-	var operators = [];
-	var myRecord = null;
+	let operators = [];
+	let myRecord = null;
 
 	const RecorderOpt = {
 		CHOOSE: 0,
 		RESULT: 1
 	};
 
-	var initGlobe = false;
-	var totalRecords =
+	let initGlobe = false;
+	let totalRecords =
 		{
 			players: [],
 			records: [],
@@ -23,8 +23,8 @@ function Recorder() {
 
 	return {
 		InitTotal: function (players, room) {
-			var arr = [];
-			for (var i = 0; i < players.length; i++) {
+			let arr = [];
+			for (let i = 0; i < players.length; i++) {
 				arr.push({ name: players[i].info.name, uid: players[i].uid });
 			}
 			totalRecords.players = arr;
@@ -81,21 +81,21 @@ function Recorder() {
 			myRecord = null;
 		},
 		GetOperationTo: function (idx, sid) {
-			var ret = { arr: [], result: null };
+			let ret = { arr: [], result: null };
 
-			var tmp = myRecord || this.lastRecord;
+			let tmp = myRecord || this.lastRecord;
 			if (tmp && tmp.result) {
 				ret.result = tmp.result;
 			}
 			//console.log(tmp, operators);
-			var arr = ret.arr;
+			let arr = ret.arr;
 			//console.log(sid, operators)
-			for (var i = sid + 1, len = operators.length; i < len; i++) {
-				var cur = operators[i];
+			for (let i = sid + 1, len = operators.length; i < len; i++) {
+				let cur = operators[i];
 				if (cur.t == RecorderOpt.CHOOSE && cur.i != idx)
 					continue;
 
-				var nobj = { idx: cur.i, op: cur.o, val: cur.v, s: i };
+				let nobj = { idx: cur.i, op: cur.o, val: cur.v, s: i };
 				if (cur.o == OperationResult.Draw && cur.i != idx)
 					nobj.val = -1;
 				arr.push(nobj);

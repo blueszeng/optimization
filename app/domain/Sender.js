@@ -1,12 +1,12 @@
-var logger = require('pomelo-logger').getLogger(__filename);
-var pomelo = require("pomelo");
-var OperationResult = require("./Logic/LogicConst").OperationResult;
+let logger = require('pomelo-logger').getLogger(__filename);
+let pomelo = require("pomelo");
+let OperationResult = require("./Logic/LogicConst").OperationResult;
 function Sender(chan, arrPlayers, rid) {
-	var room = rid;
-	var channel = chan;
-	var Service = chan.__channelService__;
-	var players = arrPlayers;
-	var recorder = null;
+	let room = rid;
+	let channel = chan;
+	let Service = chan.__channelService__;
+	let players = arrPlayers;
+	let recorder = null;
 	return {
 		SetRecorder: function (target) {
 			recorder = target;
@@ -18,16 +18,16 @@ function Sender(chan, arrPlayers, rid) {
 					logger.error("OnStart", info, err, ret);
 				}
 			});
-			// var channel = this.channel;
-			// for(var i=0; i<players.length ; i++)
+			// let channel = this.channel;
+			// for(let i=0; i<players.length ; i++)
 			// {
-			// 	var info = curGame.GetGameInfo(i);
+			// 	let info = curGame.GetGameInfo(i);
 			// 	channel.__channelService__.pushMessageByUids("OnStart", info,[channel.records[players[i].uid]]);
 			// }
 		},
 		SendOperation: function (idx, op, val) {
 
-			var s = recorder.AddOperation(op, idx, val);
+			let s = recorder.AddOperation(op, idx, val);
 			// logger.info("op",{op:op, val:val, s:s});
 			Service.pushMessageByUids("OnCall", { op: op, val: val, s: s }, [channel.records[players[idx].uid]], {}, function (err, ret) {
 				if (!!err) {
@@ -36,7 +36,7 @@ function Sender(chan, arrPlayers, rid) {
 			});
 		},
 		SendOperationResult: function (idx, op, val) {
-			var s = recorder.AddResult(op, idx, val);
+			let s = recorder.AddResult(op, idx, val);
 			//console..log({idx: idx, op:op, val:val, s:s});
 
 			// logger.info("Result", {idx: idx, op:op, val:val, s:s});
@@ -48,14 +48,14 @@ function Sender(chan, arrPlayers, rid) {
 		},
 		SendOperationDraw: function (idx, val) {
 
-			var others = [];
-			for (var i in players) {
+			let others = [];
+			for (let i in players) {
 				if (i == idx)
 					continue;
 
 				others.push(channel.records[players[i].uid]);
 			}
-			var s = recorder.AddResult(OperationResult.Draw, idx, val);
+			let s = recorder.AddResult(OperationResult.Draw, idx, val);
 			// logger.info("draw", {idx:idx, val:val, s:s});
 			Service.pushMessageByUids("OnDraw", { idx: idx, val: -1, s: s }, others, {}, function (err, ret) {
 				if (!!err) {
@@ -76,28 +76,28 @@ function Sender(chan, arrPlayers, rid) {
 				}
 			});
 			recorder.SaveResult(result);
-			// var simpleReccord = 
+			// let simpleReccord = 
 			// console.log("SendGameResult",simpleReccord);
-			// var arr = [];
-			// for(var i=0; i<arrPlayers.length; i++)
+			// let arr = [];
+			// for(let i=0; i<arrPlayers.length; i++)
 			// {
 			// 	arr.push({name: players[i].info.name, uid:players[i].uid, score: players[i].score });
 			// }
 			// simpleReccord.players = arr;
 			// simpleReccord.room = room;
-			// for(var i=0; i<arrPlayers.length; i++)
+			// for(let i=0; i<arrPlayers.length; i++)
 			// {
-			// 	var uid = players[i].uid
+			// 	let uid = players[i].uid
 			// 	pomelo.app.rpc.connector.userRemote.addRecord(channel.records[uid].sid, uid, simpleReccord,function(ret){
 			// 	//console..log("addRecord",ret);
 			// 	});
 			// }
 		},
 		SenderToSave: function () {
-			var simpleReccord = recorder.GetRoomRecord();
+			let simpleReccord = recorder.GetRoomRecord();
 			//console..log("SenderToSave",simpleReccord);
-			for (var i = 0; i < players.length; i++) {
-				var uid = players[i].uid
+			for (let i = 0; i < players.length; i++) {
+				let uid = players[i].uid
 				pomelo.app.rpc.connector.userRemote.addRecord.toServer(channel.records[uid].sid, uid, simpleReccord, function (err, ret) {
 					if (!!err) {
 						logger.error("addRecord", err, ret, simpleReccord);

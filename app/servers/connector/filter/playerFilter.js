@@ -1,12 +1,12 @@
-var logger = require('pomelo-logger').getLogger(__filename);
-var pomelo = require('pomelo');
-var Code = require("../../../code/ErrorCode");
+let logger = require('pomelo-logger').getLogger(__filename);
+let pomelo = require('pomelo');
+let Code = require("../../../code/ErrorCode");
 
 module.exports = function() {
 	return new Filter();
 };
 
-var Filter = function() {
+let Filter = function() {
 };
 
 /**
@@ -14,10 +14,10 @@ var Filter = function() {
  */
 Filter.prototype.before = function(msg, session, next){
 
-	var uid = session.uid;
+	let uid = session.uid;
 	if(!uid)
 	{
-		var route = msg.__route__;
+		let route = msg.__route__;
 		if(route.search(/Login$/i) >= 0)
 		{			
 			next();
@@ -26,7 +26,7 @@ Filter.prototype.before = function(msg, session, next){
 		next({code: Code.LOGIN_FIRST});
 		return;
 	}
-	var playerEntity = pomelo.app.PlayerManager.GetPlayer(uid);
+	let playerEntity = pomelo.app.PlayerManager.GetPlayer(uid);
 	if(!playerEntity)
 	{
 		next({code: Code.LOGIN_FIRST});

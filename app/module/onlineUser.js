@@ -3,8 +3,8 @@
  * Copyright(c) 2012 fantasyni <fantasyni@163.com>
  * MIT Licensed
  */
-var logger = require('pomelo-logger').getLogger(__filename);
-var utils = require('../util/utils');
+let logger = require('pomelo-logger').getLogger(__filename);
+let utils = require('../util/utils');
 
 module.exports = function(opts) {
 	return new Module(opts);
@@ -12,7 +12,7 @@ module.exports = function(opts) {
 
 module.exports.moduleId = 'onlineUser';
 
-var Module = function(opts) {
+let Module = function(opts) {
 	opts = opts || {};
 	this.app = opts.app;
 	this.type = opts.type || 'pull';
@@ -20,12 +20,12 @@ var Module = function(opts) {
 };
 
 Module.prototype.monitorHandler = function(agent, msg) {
-	var connectionService = this.app.components.__connection__;
+	let connectionService = this.app.components.__connection__;
 	if(!connectionService) {
 		logger.error('not support connection: %j', agent.id);
 		return;
 	}
-	var ret = connectionService.getStatisticsInfo();
+	let ret = connectionService.getStatisticsInfo();
 	console.log(ret);
 	agent.notify(module.exports.moduleId, ret);
 };
@@ -33,7 +33,7 @@ Module.prototype.monitorHandler = function(agent, msg) {
 Module.prototype.masterHandler = function(agent, msg) {
 	if(!msg) {
 		// pull interval callback
-		var list = agent.typeMap['connector'];
+		let list = agent.typeMap['connector'];
 		if(!list || list.length === 0) {
 			return;
 		}
@@ -41,7 +41,7 @@ Module.prototype.masterHandler = function(agent, msg) {
 		return;
 	}
 
-	var data = agent.get(module.exports.moduleId);
+	let data = agent.get(module.exports.moduleId);
 	if(!data) {
 		data = {};
 		agent.set(module.exports.moduleId, data);

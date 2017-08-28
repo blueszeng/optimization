@@ -2,11 +2,11 @@
 
 
 
-// var lastOperation = 0;
-// var hasOperation = [0,0,0,0];
+// let lastOperation = 0;
+// let hasOperation = [0,0,0,0];
 // function ClearOperation()
 // {
-// 	for(var i=0; i<hasOperation.length; i++)
+// 	for(let i=0; i<hasOperation.length; i++)
 // 	{
 // 		hasOperation[i] = 0;
 // 	}
@@ -18,10 +18,10 @@
 
 function Operation() {
 
-	var hasOperation = [0, 0, 0, 0];
+	let hasOperation = [0, 0, 0, 0];
 	return {
 		ClearOperation: function () {
-			for (var i = 0; i < hasOperation.length; i++) {
+			for (let i = 0; i < hasOperation.length; i++) {
 				hasOperation[i] = 0;
 			}
 		},
@@ -43,7 +43,7 @@ function Operation() {
 
 		CheckAllOperation: function () {
 			//console.log(hasOperation);
-			for (var i = 0; i < hasOperation.length; i++) {
+			for (let i = 0; i < hasOperation.length; i++) {
 				if (hasOperation[i])
 					return true;
 			}
@@ -51,7 +51,7 @@ function Operation() {
 		},
 
 		ForEachOperation(cb) {
-			for (var i = 0; i < hasOperation.length; i++) {
+			for (let i = 0; i < hasOperation.length; i++) {
 				if (hasOperation[i])
 					cb(i, hasOperation[i]);
 			}

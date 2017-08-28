@@ -9,10 +9,10 @@ const LastCounter =
 	}
 
 function ScoreCount(arrPlayers) {
-	var players = arrPlayers;
-	var roundCouter = [];
-	var gen = -1;
-	var thingsCoutner = []
+	let players = arrPlayers;
+	let roundCouter = [];
+	let gen = -1;
+	let thingsCoutner = []
 	return {
 		StartInit: function () {
 			thingsCoutner = [[0, 0, 0, 0, 0],
@@ -26,7 +26,7 @@ function ScoreCount(arrPlayers) {
 		},
 		FromGen: function (host) {
 			gen = host;
-			for (var i = players.length - 1; 0 <= i; i--) {
+			for (let i = players.length - 1; 0 <= i; i--) {
 				if (host == i) {
 					//players[i].score -= 3;
 					roundCouter[i] -= 3;
@@ -48,7 +48,7 @@ function ScoreCount(arrPlayers) {
 		},
 		FromAll: function (idx, point) {
 			//console.log("FromAll", idx, point, roundCouter);
-			for (var i = players.length - 1; 0 <= i; i--) {
+			for (let i = players.length - 1; 0 <= i; i--) {
 				if (idx == i) {
 					//players[i].score += point*3;
 					roundCouter[i] += point * 3;
@@ -82,12 +82,12 @@ function ScoreCount(arrPlayers) {
 			return thingsCoutner;
 		},
 		GetRoundCounter: function () {
-			var scoreArr = [0, 0, 0, 0];
-			for (var i = players.length - 1; 0 <= i; i--) {
+			let scoreArr = [0, 0, 0, 0];
+			for (let i = players.length - 1; 0 <= i; i--) {
 				players[i].score += roundCouter[i];
 				scoreArr[i] = players[i].score;
 			}
-			var retRound = roundCouter;
+			let retRound = roundCouter;
 			roundCouter = [0, 0, 0, 0];
 			return { final: scoreArr, round: retRound, gen: gen };
 		}
