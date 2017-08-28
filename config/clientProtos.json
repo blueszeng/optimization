@@ -1,0 +1,17 @@
+{
+	"game.gameHandler.operation":{
+	"required uInt32 op":1,
+	"optional int32 val":2
+	},
+	"connector.userHandler.createRoom":{
+		"required uInt32 cost" : 1,
+		"message option" : {
+			"required uInt32 type" :  1,
+			"required uInt32 ma" : 2,
+			"required uInt32 gui" : 3,
+			"required uInt32 wanfa" : 4,
+			"required uInt32 hufa" : 5
+		},
+		"required option opt" : 2
+	}
+}

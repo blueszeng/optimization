@@ -1,0 +1,41 @@
+{
+	"OnPlay":{
+		 "required int32 idx" : 1,
+		 "required int32 op" : 2,
+		 "required int32 val": 3,
+		 "required int32 s": 4
+	},
+	"OnCall":{
+		 "required int32 op" : 1,
+		 "required int32 val": 2,
+		 "required int32 s": 3
+	},
+	"OnDraw":{
+		 "required int32 idx" : 1,
+		 "required int32 s": 2,
+ 		 "optional int32 val": 3
+	},
+	"OnReady":{
+		 "required int32 0" : 1,
+		 "required int32 1" : 2,
+ 		 "required int32 2" : 3,
+ 		 "required int32 3" : 4
+	},
+	"OnChoose":{
+		 "required int32 0" : 1,
+		 "required int32 1" : 2,
+ 		 "required int32 2" : 3,
+ 		 "required int32 3" : 4
+	},
+	"OnNet":{
+		 "required int32 idx" : 1,
+		 "required int32 status" : 2
+	},
+	"OnLeave":{
+		"required int32 idx" : 1
+	},
+	"OnRoomClose":{
+		 "required int32 room" : 1,
+		 "required int32 reason" : 2
+	}
+}

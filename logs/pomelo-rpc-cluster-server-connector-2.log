@@ -1,0 +1,1 @@
+[2017-08-28 18:00:04.630] [ERROR] pomelo-rpc - [31m[rpc-client] [39m[pomelo-rpc] invalid rpc invoke, arguments length less than 2, namespace: "user", serverType, "game", serviceName: "roomRemote", methodName: "join"

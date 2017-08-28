@@ -1,0 +1,24 @@
+{
+    "development": {
+        "platform": [
+            {"id": "platform-server-1", "host": "127.0.0.1", "clientPort": 8720, "frontend": true,"webPort":8718}
+        ],
+        "connector": [
+            {  "host": "127.0.0.1", "output": "120.76.182.17", "port": "8741++", "clientPort": "8721++", "frontend": true, "clusterCount": 6 }
+        ],
+        "game": [
+            {  "host": "127.0.0.1", "port": "8734++", "idx": "0++", "max": 6, "clusterCount": 6 }
+        ]
+    },
+    "production": {
+        "platform": [
+            { "id": "platform-server-1", "host": "127.0.0.1", "clientPort": 8821, "frontend": true, "webPort": 8718 }
+        ],
+        "connector": [
+            {  "host": "127.0.0.1", "output": "120.76.182.17", "port": "8831++", "clientPort": "8822++", "frontend": true, "clusterCount": 6 }
+        ],
+        "game": [
+            {  "host": "127.0.0.1", "port": "8841++", "idx": "0++", "max": 4, "clusterCount": 4 }
+        ]
+    }
+}
