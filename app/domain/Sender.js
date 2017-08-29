@@ -13,7 +13,7 @@ function Sender(chan, arrPlayers, rid) {
 		},
 		SendGameStart: function (idx, info) {
 			//console.log("SendGameStart",channel.records, idx, players);
-			Service.pushMessageByUids("OnStart", info, [channel.records[players[idx].uid]], {}, function (err, ret) {
+			Service.pushMessageByUids("OnStart", info, [channel.getMember(players[idx].uid)], {}, function (err, ret) {
 				if (!!err) {
 					logger.error("OnStart", info, err, ret);
 				}
@@ -22,14 +22,14 @@ function Sender(chan, arrPlayers, rid) {
 			// for(let i=0; i<players.length ; i++)
 			// {
 			// 	let info = curGame.GetGameInfo(i);
-			// 	channel.__channelService__.pushMessageByUids("OnStart", info,[channel.records[players[i].uid]]);
+			// 	channel.__channelService__.pushMessageByUids("OnStart", info,[channel.getMember(players[i].uid]]);
 			// }
 		},
 		SendOperation: function (idx, op, val) {
 
 			let s = recorder.AddOperation(op, idx, val);
 			// logger.info("op",{op:op, val:val, s:s});
-			Service.pushMessageByUids("OnCall", { op: op, val: val, s: s }, [channel.records[players[idx].uid]], {}, function (err, ret) {
+			Service.pushMessageByUids("OnCall", { op: op, val: val, s: s }, [channel.getMember(players[idx].uid)], {}, function (err, ret) {
 				if (!!err) {
 					logger.error("OnCall", { op: op, val: val, s: s }, err, ret);
 				}
@@ -53,7 +53,7 @@ function Sender(chan, arrPlayers, rid) {
 				if (i == idx)
 					continue;
 
-				others.push(channel.records[players[i].uid]);
+				others.push(channel.getMember(players[i].uid));
 			}
 			let s = recorder.AddResult(OperationResult.Draw, idx, val);
 			// logger.info("draw", {idx:idx, val:val, s:s});
@@ -62,7 +62,7 @@ function Sender(chan, arrPlayers, rid) {
 					logger.error("OnDraw", { idx: idx, s: s }, err, ret);
 				}
 			});
-			Service.pushMessageByUids("OnDraw", { idx: idx, val: val, s: s }, [channel.records[players[idx].uid]], {}, function (err, ret) {
+			Service.pushMessageByUids("OnDraw", { idx: idx, val: val, s: s }, [channel.getMember(players[idx].uid)], {}, function (err, ret) {
 				if (!!err) {
 					logger.error("OnDraw", { idx: idx, val: val, s: s }, err, ret);
 				}
@@ -88,7 +88,7 @@ function Sender(chan, arrPlayers, rid) {
 			// for(let i=0; i<arrPlayers.length; i++)
 			// {
 			// 	let uid = players[i].uid
-			// 	pomelo.app.rpc.connector.userRemote.addRecord(channel.records[uid].sid, uid, simpleReccord,function(ret){
+			// 	pomelo.app.rpc.connector.userRemote.addRecord(channel.getMember(uid].sid, uid, simpleReccord,function(ret){
 			// 	//console..log("addRecord",ret);
 			// 	});
 			// }
@@ -98,7 +98,7 @@ function Sender(chan, arrPlayers, rid) {
 			//console..log("SenderToSave",simpleReccord);
 			for (let i = 0; i < players.length; i++) {
 				let uid = players[i].uid
-				pomelo.app.rpc.connector.userRemote.addRecord.toServer(channel.records[uid].sid, uid, simpleReccord, function (err, ret) {
+				pomelo.app.rpc.connector.userRemote.addRecord.toServer(channel.getMember(uid].sid, uid, simpleReccord, function (err, ret) {
 					if (!!err) {
 						logger.error("addRecord", err, ret, simpleReccord);
 					}

@@ -346,3 +346,21 @@
 [2017-08-28 18:19:29.562] [INFO] pomelo-admin - [32m[ConsoleService] [39mtry to connect master: "game", "127.0.0.1", 8710
 [2017-08-28 18:19:29.579] [INFO] pomelo-admin - [32m[ConsoleService] [39mtry to connect master: "connector", "127.0.0.1", 8710
 [2017-08-28 18:19:29.683] [INFO] pomelo-admin - [32m[ConsoleService] [39mtry to connect master: "game", "127.0.0.1", 8710
+[2017-08-28 18:31:34.234] [INFO] pomelo-admin - [32m[MqttServer] [39m[MqttServer] listen on 8710
+[2017-08-28 18:31:34.436] [INFO] pomelo-admin - [32m[ConsoleService] [39mtry to connect master: "master", "127.0.0.1", 8710
+[2017-08-28 18:31:36.407] [INFO] pomelo-admin - [32m[ConsoleService] [39mtry to connect master: "platform", "127.0.0.1", 8710
+[2017-08-28 18:32:13.321] [INFO] pomelo-admin - [32m[MqttServer] [39m[MqttServer] listen on 8710
+[2017-08-28 18:32:13.831] [INFO] pomelo-admin - [32m[ConsoleService] [39mtry to connect master: "master", "127.0.0.1", 8710
+[2017-08-28 18:32:15.173] [INFO] pomelo-admin - [32m[ConsoleService] [39mtry to connect master: "connector", "127.0.0.1", 8710
+[2017-08-28 18:32:15.713] [INFO] pomelo-admin - [32m[ConsoleService] [39mtry to connect master: "game", "127.0.0.1", 8710
+[2017-08-28 18:32:15.895] [INFO] pomelo-admin - [32m[ConsoleService] [39mtry to connect master: "connector", "127.0.0.1", 8710
+[2017-08-28 18:32:16.686] [INFO] pomelo-admin - [32m[ConsoleService] [39mtry to connect master: "game", "127.0.0.1", 8710
+[2017-08-28 18:32:16.930] [INFO] pomelo-admin - [32m[ConsoleService] [39mtry to connect master: "game", "127.0.0.1", 8710
+[2017-08-28 18:32:16.949] [INFO] pomelo-admin - [32m[ConsoleService] [39mtry to connect master: "connector", "127.0.0.1", 8710
+[2017-08-28 18:32:17.125] [INFO] pomelo-admin - [32m[ConsoleService] [39mtry to connect master: "connector", "127.0.0.1", 8710
+[2017-08-28 18:32:17.299] [INFO] pomelo-admin - [32m[ConsoleService] [39mtry to connect master: "game", "127.0.0.1", 8710
+[2017-08-28 18:32:17.362] [INFO] pomelo-admin - [32m[ConsoleService] [39mtry to connect master: "connector", "127.0.0.1", 8710
+[2017-08-28 18:32:17.276] [INFO] pomelo-admin - [32m[ConsoleService] [39mtry to connect master: "game", "127.0.0.1", 8710
+[2017-08-28 18:32:17.394] [INFO] pomelo-admin - [32m[ConsoleService] [39mtry to connect master: "connector", "127.0.0.1", 8710
+[2017-08-28 18:32:17.571] [INFO] pomelo-admin - [32m[ConsoleService] [39mtry to connect master: "platform", "127.0.0.1", 8710
+[2017-08-28 18:32:17.967] [INFO] pomelo-admin - [32m[ConsoleService] [39mtry to connect master: "game", "127.0.0.1", 8710

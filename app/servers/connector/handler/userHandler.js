@@ -57,11 +57,11 @@ Handler.prototype.Login = function (msg, session, next) {
 	// console.log(uid);
 	PlayerDao.FindPlayerByUserID(uid)
 		.then((playerEntity) => {
-			if (!playerEntity) {
-				logger.error("FindPlayerByUserID", err, playerEntity);
-				next(null, { code: Code.INVALIDATE_USER });
-				return;
-			}
+			// if (!playerEntity) {
+			// 	logger.error("FindPlayerByUserID", err, playerEntity);
+			// 	next(null, { code: Code.INVALIDATE_USER });
+			// 	return;
+			// }
 			if (uid == session.uid) {
 				logger.warn("repeat Login", uid);
 				next(null, playerEntity.GetUserInfo(true));

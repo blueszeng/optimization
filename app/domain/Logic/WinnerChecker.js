@@ -434,7 +434,6 @@ let WinnnerChecker = {
 			return false;
 		let j = 0;
 		let curGuiCount = guiCount;
-		let j = 0;
 		for (let src in hash) {
 			if (hash[src] % 2 == 1) {
 				if (curGuiCount == 0)

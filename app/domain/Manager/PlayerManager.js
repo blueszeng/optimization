@@ -31,14 +31,14 @@ class PlayerManager {
 			}
 			let PlayerDao = require("../../dao/PlayerDao");
 			PlayerDao.FindPlayerByUserID(uid)
-			.then((playerEntity) => {
-				if (!!playerEntity) {
-					return resolve(playerEntity);
-				}
-				return reject({ code: 1 });
-			}).catch((err) => {
-				return reject({ code: 1 });
-			});
+				.then((playerEntity) => {
+					if (!!playerEntity) {
+						return resolve(playerEntity);
+					}
+					return reject({ code: 1 });
+				}).catch((err) => {
+					return reject({ code: 1 });
+				});
 		});
 	}
 	GetPlayerRoom(uid) {

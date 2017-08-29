@@ -2,11 +2,11 @@
 var Code = require("../../../code/ErrorCode");
 var RoomManager = require("../../../domain/Manager/RoomManager");
 
-module.exports = function(app) {
+module.exports = function (app) {
   return new Handler(app);
 };
 
-var Handler = function(app) {
+var Handler = function (app) {
   this.app = app;
 };
 
@@ -36,7 +36,7 @@ var Handler = function(app) {
 // 		return;
 // 	}
 // 	channel.pushMessage('OnChat', param);
-	
+
 
 // 	next(null, {
 // 		code: Code.OK
@@ -62,7 +62,7 @@ var Handler = function(app) {
 // 		return;
 // 	}
 // 	channel.pushMessage('OnChatBytes', param);
-	
+
 
 // 	next(null, {
 // 		code: Code.OK

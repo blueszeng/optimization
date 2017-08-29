@@ -89,63 +89,64 @@ let GameLogic = function (msgSender, roomEntity) {
 			gameWay = {};
 			let hufa = Number(opt.hufa);
 			let ways = HuFa;
-			if (opt.type == GameType.jihu) {
-				rate = {
-					zimo: 2,
-					duiduihu: 2,
-					haidi: 2,
-					qiang: 2,
-					wuguijiabei: 2,
-				};
+			switch (opt.type) {
+				case GameType.jihu:
+					rate = {
+						zimo: 2,
+						duiduihu: 2,
+						haidi: 2,
+						qiang: 2,
+						wuguijiabei: 2,
+					};
+					for (let src in CheckHuFa)
+						if (!(hufa & ways[src]))
+							rate[src] = 0;
+					break;
+				case GameType.yibaizhang:
+					rate = {
+						zimo: 2,
+						duiduihu: 2,
+						siguihupai: 2,
+						shisan: 16,
+						qingyise: 4,
+						quanfeng: 16,
+						yaojiu: 8,
+						wuguijiabei: 2,
+						chihu: 2,
+						haidi: 0,
+						hunyise: 2,
+						qingdui: 8,
+						quanyao: 16,
+						hundui: 4,
+						qiang: 2,
+					};
+					for (let src in CheckHuFa)
+						if (!(hufa & ways[src]))
+							rate[src] = 0;
+					break;
+				case GameType.ningdu:
+					rate = {
+						zimo: 2,
+						duiduihu: 2,
+						qidui: 2
+					};
+					gameWay.ningdu = true;
+					for (let src in CheckHuFa)
+						if (!(hufa & ways[src]))
+							rate[src] = 0;
+					break;
+				case GameType.xinxing:
+					rate = {
+						zimo: 2
+					};
 
-				for (let src in CheckHuFa)
-					if (!(hufa & ways[src]))
-						rate[src] = 0;
+					for (let src in CheckHuFa)
+						if (!(hufa & ways[src]))
+							rate[src] = 0;
+					break;
+				default:
+					return false;
 			}
-			else if (opt.type == GameType.yibaizhang) {
-				rate = {
-					zimo: 2,
-					duiduihu: 2,
-					siguihupai: 2,
-					shisan: 16,
-					qingyise: 4,
-					quanfeng: 16,
-					yaojiu: 8,
-					wuguijiabei: 2,
-					chihu: 2,
-					haidi: 0,
-					hunyise: 2,
-					qingdui: 8,
-					quanyao: 16,
-					hundui: 4,
-					qiang: 2,
-				};
-				for (let src in CheckHuFa)
-					if (!(hufa & ways[src]))
-						rate[src] = 0;
-
-			}
-			else if (opt.type == GameType.ningdu) {
-				rate = {
-					zimo: 2,
-					duiduihu: 2,
-					qidui: 2
-				};
-				gameWay.ningdu = true;
-				for (let src in CheckHuFa)
-					if (!(hufa & ways[src]))
-						rate[src] = 0;
-			}
-			else if (opt.type == GameType.xinxing) {
-				rate = {
-					zimo: 2
-				};
-
-				for (let src in CheckHuFa)
-					if (!(hufa & ways[src]))
-						rate[src] = 0;
-			}
-			else return false;
 			lastHost = 0;
 			option = opt;
 			host = 0;//opt.host || 0;

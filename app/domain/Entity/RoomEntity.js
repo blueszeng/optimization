@@ -201,7 +201,7 @@ class RoomEntity {
 
 		this.players[i] = null;
 		this.UserLevel(uid, LEAVE_REASON.LRSelfLeave);
-		this.channel.leave(uid, this.channel.records[uid].sid);
+		this.channel.leave(uid, this.channel.getMember([uid]).sid);
 		this.PushMessage("OnLeave", { idx: i })
 	}
 
@@ -275,7 +275,7 @@ class RoomEntity {
 		//第二局 游戏扣房主的房卡
 		if (this.level == 2) {
 			var uid = this.players[0].uid;
-			pomelo.app.rpc.connector.userRemote.useCard.toServer(this.channel.records[uid].sid, uid, this.opt.cost, function (err, ret) {
+			pomelo.app.rpc.connector.userRemote.useCard.toServer(this.channel.getMember([uid]).sid, uid, this.opt.cost, function (err, ret) {
 				if (!!err) {
 					logger.error("useCard", err, ret);
 				}
@@ -326,7 +326,7 @@ class RoomEntity {
 
 	UserLevel(uid, reason) {
 		//console.log(this.channel.records);
-		pomelo.app.rpc.connector.userRemote.leaveRoom.toServer(this.channel.records[uid].sid, uid, reason, function (err, ret) {
+		pomelo.app.rpc.connector.userRemote.leaveRoom.toServer(this.channel.getMember([uid]).sid, uid, reason, function (err, ret) {
 			if (!!err) {
 				logger.error("leaveRoom fial!", err, ret, uid);
 			}
@@ -352,7 +352,7 @@ class RoomEntity {
 				if (!!players[i]) {
 					var uid = players[i].uid;
 					self.UserLevel(uid, reason);
-					var record = self.channel.records[uid];
+					var record = self.channel.getMember([uid]);
 					if (!!record)
 						self.channel.leave(uid, record.sid);
 				}
