@@ -98,7 +98,7 @@ function Sender(chan, arrPlayers, rid) {
 			//console..log("SenderToSave",simpleReccord);
 			for (let i = 0; i < players.length; i++) {
 				let uid = players[i].uid
-				pomelo.app.rpc.connector.userRemote.addRecord.toServer(channel.getMember(uid].sid, uid, simpleReccord, function (err, ret) {
+				pomelo.app.rpc.connector.userRemote.addRecord.toServer(channel.getMember(uid).sid, uid, simpleReccord, function (err, ret) {
 					if (!!err) {
 						logger.error("addRecord", err, ret, simpleReccord);
 					}
